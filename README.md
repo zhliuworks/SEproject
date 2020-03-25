@@ -1,2 +1,1 @@
-# SEproject
-This repository was established for the web application project in our software engineering course.
+校园“知乎”网页应用——软件工程课小组项目
