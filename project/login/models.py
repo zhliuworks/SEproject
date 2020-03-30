@@ -21,7 +21,7 @@ class User(models.Model):
         ('qi_ta', "其它"),  # 暂时写到这儿
     )
 
-    id = models.CharField(max_length=128, unique=True, primary_key=True)  # 学号
+    sno = models.CharField(max_length=128, unique=True, primary_key=True)  # 学号
     name = models.CharField(max_length=128)  # 名字
     nickname = models.CharField(max_length=128, default='--')  # 昵称
     password = models.CharField(max_length=256)  # 密码
@@ -32,7 +32,7 @@ class User(models.Model):
     c_time = models.DateTimeField(auto_now_add=True)  # 注册时间
 
     def __str__(self):
-        return self.id
+        return self.sno
 
     class Meta:
         ordering = ["-c_time"]
