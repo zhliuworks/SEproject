@@ -1,20 +1,20 @@
-校园“知乎”网页应用（Django）—— 软件工程课小组项目
+# 校园“知乎”网页应用（Django）—— 软件工程课小组项目
 
-注：该仓库中只包含Django网页应用的部分必要代码文件，不含诸如db.sqlite3等文件。
+## 注：该仓库中只包含Django网页应用的部分必要代码文件，不含诸如db.sqlite3等文件。
 
-包括源代码文件如下：
+## 包括源代码文件如下：
 
 manage.py（服务器管理）
 
 
---project/
+### --project/
 
 settings.py（服务器设置）
 
 urls.py（根路由）
 
 
---login/（登录app）
+### --login/（登录app）
 admin.py（管理）
 
 apps.py
