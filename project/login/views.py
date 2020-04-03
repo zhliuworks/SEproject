@@ -29,6 +29,11 @@ def login(request):
                 request.session['is_login'] = True
                 request.session['user_sno'] = user.sno
                 request.session['user_name'] = user.name
+                request.session['user_nickname'] = user.nickname
+                request.session['user_email'] = user.email
+                request.session['user_sex'] = user.get_sex_display()
+                request.session['user_institute'] = user.get_institute_display()
+                request.session['user_major'] = user.major
                 return redirect('/login/index/')
             else:
                 message = '密码不正确！'
@@ -94,3 +99,27 @@ def logout(request):
         return redirect("/login/login/")
     request.session.flush()
     return redirect("/login/login/")
+
+def about(request):
+    if not request.session.get('is_login', None):
+        return redirect("/login/login/")
+    return render(request, 'login/about.html')
+
+def editpwd(request):
+    if not request.session.get('is_login', None):
+        return redirect("/login/login/")
+    pwd1 = request.POST.get('pwd1')
+    pwd2 = request.POST.get('pwd2')
+    user = models.User.objects.get(sno=request.session['user_sno'])
+    message = ""
+
+    if pwd1 == pwd2 and pwd1:
+        user.password = pwd1
+        user.save()
+    elif not pwd1:
+        message = "密码输入为空！"
+        return render(request, 'login/about.html', {'message': message})
+    else:
+        message = "两次输入的密码不同！"
+        return render(request, 'login/about.html', {'message': message})
+    return redirect("/about/")
