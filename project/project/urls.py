@@ -8,4 +8,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('login/', include('login.urls')),
     path('captcha/', include('captcha.urls')),
+    path('about/', views.about),
+    path('editpwd/', views.editpwd),
+    path('course/', include('course.urls')),
 ]
