@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>我的</title>
+</head>
+
+<body>
+  <p>学号：{{request.session.user_sno}}</p><br>
+  <p>姓名：{{request.session.user_name}}</p><br>
+  <p>昵称：{{request.session.user_nickname}}</p><br>
+  <p>性别：{{request.session.user_sex}}</p><br>
+  <p>学院：{{request.session.user_institute}}</p><br>
+  <p>专业：{{request.session.user_major}}</p><br>
+  <a href="/login/index/">返回主页</a><br>
+
+  <form action="/editpwd/" method="post">
+    {% csrf_token %}
+    <label>修改密码
+      <input type="password" name="pwd1">
+    </label>
+    <br>
+    <label>再次输入密码
+      <input type="password" name="pwd2">
+    </label>
+    <input type="submit" value="提交">
+  </form>
+  <p>{{message}}</p><br>
+
+</body>
+
+</html>
