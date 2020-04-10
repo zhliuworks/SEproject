@@ -11,4 +11,5 @@ urlpatterns = [
     path('about/', views.about),
     path('editpwd/', views.editpwd),
     path('course/', include('course.urls')),
+    path('bbs/', include('bbs.urls')),
 ]

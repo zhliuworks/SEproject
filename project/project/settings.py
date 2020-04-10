@@ -26,6 +26,7 @@ INSTALLED_APPS = [
     'login',
     'course',
     'captcha',
+    'bbs',
 ]
 
 MIDDLEWARE = [

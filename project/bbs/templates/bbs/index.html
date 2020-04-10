@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>首页</title>
+</head>
+<body>
+<h3>帖子列表：</h3>
+    {% for post in posts %}
+        <a href="/bbs/{{ post.id }}"> {{ post.title }} </a>  作者：{{ post.author.name }} 创建时间：{{ post.create_time }}
+        <br/>
+    {% endfor %}
+
+    </br>
+    </br>
+    <a href="/bbs/edit/">写博客</a>
+
+</body>
+</html>

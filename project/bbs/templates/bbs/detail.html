@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>帖子详情页</title>
+</head>
+<body>
+    <h3>标题： {{ post.title }}</h3>
+    </br>
+    <h3>创建时间: {{ post.create_time }}</h3>
+    <h3>内容: {{ post.content }}</h3>
+    <h3>类别：{{ post.category }}</h3>
+    <h3>标签:
+        <ul>
+            {% for tag in tags %}
+            <li> {{ tag }} </li>
+            {% endfor %}
+        </ul>
+    </h3>
+    <a href="">编辑</a>
+</body>
+</html>
