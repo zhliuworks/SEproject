@@ -5,11 +5,13 @@ class Course(models.Model):
     cno = models.CharField(max_length=128, unique=True, primary_key=True)  # 课号
     name = models.CharField(max_length=128)  # 课程名
     credit = models.IntegerField(default=0)  # 学分
-    # teachers = models.ManyToManyField(Course, through='Teaching', through_fields=('course', 'teacher')) # 教授老师
     outline = models.CharField(max_length=2048, default='略')  # 授课大纲
     references = models.CharField(max_length=1024, default='略')  # 教材与参考资料
     mean_score = models.FloatField(default=0)  # 平均分
     fail_rate = models.FloatField(default=0)  # 挂科率
+
+    def __str__(self):
+        return self.name
 
     class Meta:
         ordering = ["-cno"]
@@ -47,7 +49,10 @@ class Teacher(models.Model):
     address = models.CharField(max_length=256, default='--')  # 办公室地点
     resume = models.CharField(max_length=2048, default='略')  # 简历
 
-    # courses = models.ManyToManyField(Course, through='Teaching', through_fields=('course', 'teacher'))  # 教授课程
+    course = models.ManyToManyField(Course, verbose_name='课程')  # 教授课程
+
+    def __str__(self):
+        return self.name
 
     class Meta:
         ordering = ["-tno"]
@@ -55,8 +60,5 @@ class Teacher(models.Model):
         verbose_name_plural = "教师"
 
 
-'''
-class Teaching(models.Model):
-    course = models.ForeignKey(Course, on_delete=models.CASCADE)
-    teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE)
-'''
+
+

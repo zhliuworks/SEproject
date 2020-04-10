@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>teacher_detail</title>
+</head>
+<body>
+<a href="/course/teachers/">返回老师主页</a> <br>
+<h> 姓名 {{ teacher.name }} </h>
+<p> 工号 {{ teacher.tno }}</p>
+<p> 职称 {{ teacher.title }}</p>
+<p> 学院 {{ teacher.get_institute_display }}</p>
+<p> 专业系 {{ teacher.department }}</p>
+<p> 办公地址 {{ teacher.address }}</p>
+<p>
+    教授课程
+<ul>
+    {% for course in courses %}
+    <li><a href="/course/course/{{ course.cno }}/"> {{ course.name }}</a></li>
+    {% endfor %}
+</ul>
+</p>
+</body>
+</html>
