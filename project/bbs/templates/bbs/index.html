@@ -1,19 +1,63 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <title>首页</title>
+  <meta charset="UTF-8">
+  <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+  <script src="{% static 'js/jquery.min.js' %}"></script>
+  <script src="{% static 'js/bootstrap.min.js' %}"></script>
+  <title>帖子主页</title>
 </head>
-<body>
-<h3>帖子列表：</h3>
-    {% for post in posts %}
-        <a href="/bbs/{{ post.id }}"> {{ post.title }} </a>  作者：{{ post.author.name }} 创建时间：{{ post.create_time }}
-        <br/>
-    {% endfor %}
 
-    </br>
-    </br>
-    <a href="/bbs/edit/">写博客</a>
+<br>
+<div class="text-center">
+  <h3>帖子列表</h3>
+  <a href="/bbs/edit/">写博客</a><br>
+  <a href="/login/index/">返回主页</a><br>
+  <h4>总共有{{length}}个帖子，按发帖时间排序如下：</h4>
+  <table>
+    <tr>
+      <td>序号</td>
+      <td>标题</td>
+      <td>作者</td>
+      <td>类别</td>
+      <td>点赞量</td>
+      <td>创建时间</td>
+    </tr>
+  {% for post in posts %}
+     <tr>
+       <td>{{post.id}}</td>
+       <td><a href="/bbs/{{ post.id }}">{{ post.title }}</a></td>
+       <td>{{ post.author.name }}</td>
+       <td>{{ post.category.name }}</td>
+       <td>{{ post.likes }}</td>
+       <td>{{ post.create_time }}</td>
+     </tr>
+  {% endfor %}
+  </table>
+</div>
 
+{# 实现分页标签的代码 #}
+{# 这里使用 bootstrap 渲染页面 #}
+<div id="pages" class="text-center">
+  <nav>
+    <ul class="pagination">
+      <li class="step-links">
+        {% if posts.has_previous %}
+        <a class='active' href="?page={{ posts.previous_page_number }}">上一页</a>
+        {% endif %}
+
+        <span class="current">
+          Page {{ posts.number }} of {{ posts.paginator.num_pages }}</span>
+
+        {% if posts.has_next %}
+        <a class='active' href="?page={{ posts.next_page_number }}">下一页</a>
+        {% endif %}
+      </li>
+    </ul>
+  </nav>
+</div>
 </body>
+
 </html>
