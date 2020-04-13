@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage, InvalidPage
 from . import models, forms
 from login.models import User
 
@@ -7,9 +8,21 @@ from login.models import User
 def index(request):
     if not request.session.get('is_login', None):
         return redirect("/login/login/")
-    posts = models.Post.objects.all()
-    ctx = {'posts': posts}
-    return render(request, 'bbs/index.html', ctx)
+    posts_list = models.Post.objects.order_by('-create_time')
+    paginator = Paginator(posts_list, 3)
+    if request.method == "GET":
+        page = request.GET.get('page')
+        try:
+            posts = paginator.page(page)
+        except PageNotAnInteger:
+            posts = paginator.page(1)
+        except InvalidPage:
+            return HttpResponse('找不到页面的内容')
+        except EmptyPage:
+            posts = paginator.page(paginator.num_pages)
+    else:
+        posts = paginator.page(1)
+    return render(request, 'bbs/index.html', {'posts': posts, "length": len(posts_list)})
 
 
 def bbs_detail(request, post_id):
@@ -51,10 +64,11 @@ def post_edit_page_action(request):
             post_new.tags.add(tag)
 
             posts = models.Post.objects.all()
-            return render(request, 'bbs/index.html', {'posts': posts})
+            return index(request)
 
     post = models.Post.objects.get(pk=post_id)
     post.title = title
     post.content = content
     post.save()
     return render(request, 'bbs/edit_page.html', {'post': post})
+
