@@ -55,6 +55,16 @@
   </nav>
   <!--基础导航栏-->
 
+  <img id="photo" src="{{ request.session.user_photo_url }}" alt="头像"><br>
+  <form action="/editphoto/" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {% if sign_photo %}
+    <input type="file" name="photo" value="修改头像">
+    <input type="submit" value="提交">
+    {% else %}
+    <input type="submit" value="修改头像">
+    {% endif %}
+  </form>
 
   <p>学号：{{request.session.user_sno}}</p><br>
   <p>姓名：{{request.session.user_name}}</p><br>

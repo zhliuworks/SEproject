@@ -34,6 +34,7 @@ def login(request):
                 request.session['user_sex'] = user.get_sex_display()
                 request.session['user_institute'] = user.get_institute_display()
                 request.session['user_major'] = user.major
+                request.session['user_photo_url'] = user.photo_clipped.url
                 return redirect('/login/index/')
             else:
                 message = '密码不正确！'
@@ -106,6 +107,7 @@ def about(request):
     sign_nick = False
     sign_email = False
     sign_pwd = False
+    sign_photo = False
     return render(request, 'login/about.html', {'sign_nick': sign_nick, 'sign_email': sign_email, 'sign_pwd': sign_pwd})
 
 def editpwd(request):
@@ -161,3 +163,18 @@ def editemail(request):
     else:
         sign = True
         return render(request, 'login/about.html', {'sign_email': sign})
+
+def editphoto(request):
+    if not request.session.get('is_login', None):
+        return redirect("/login/login/")
+    if request.method == 'POST':
+        photo = request.FILES.get('photo')
+        if photo:
+            user = models.User.objects.get(sno=request.session['user_sno'])
+            user.photo = photo
+            user.save()
+            request.session['user_photo_url'] = user.photo_clipped.url
+            return redirect("/about/")
+        else:
+            sign = True
+            return render(request, 'login/about.html', {'sign_photo': sign})

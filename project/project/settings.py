@@ -104,3 +104,10 @@ USE_TZ = False
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/static/'
+
+
+# 配置 MEDIA_ROOT 作为上传文件在服务器中的基本路径
+MEDIA_ROOT = os.path.join(BASE_DIR, 'upload')
+# 配置 MEDIA_URL 作为公用 URL，指向上传文件的基本路径
+MEDIA_URL = '/media/'
+# 这里特意写成 upload 和 media，而不是统一写成 media 或 upload，是为了便于理解 MEDIA_ROOT 和 MEDIA_URL 的作用和区别
