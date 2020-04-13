@@ -58,23 +58,57 @@
 
   <p>学号：{{request.session.user_sno}}</p><br>
   <p>姓名：{{request.session.user_name}}</p><br>
-  <p>昵称：{{request.session.user_nickname}}</p><br>
+
+  <form action="/editnickname/" method="post">
+    {% csrf_token %}
+    <p>昵称：
+      {% if sign_nick %}
+      <label>
+        <input type="text" name="nickname">
+      </label>
+      <input type="submit" value="提交">
+      {% else %}
+      {{request.session.user_nickname}}</p>
+    <input type="submit" value="修改昵称">
+    {% endif %}
+  </form>
+
   <p>性别：{{request.session.user_sex}}</p><br>
   <p>学院：{{request.session.user_institute}}</p><br>
   <p>专业：{{request.session.user_major}}</p><br>
 
+  <form action="/editemail/" method="post">
+    {% csrf_token %}
+    <p>邮箱：
+      {% if sign_email %}
+      <label>
+        <input type="text" name="email">
+      </label>
+      <input type="submit" value="提交">
+      {% else %}
+      {{request.session.user_email}}</p>
+    <input type="submit" value="修改邮箱">
+    {% endif %}
+  </form>
+
   <form action="/editpwd/" method="post">
     {% csrf_token %}
-    <label>修改密码
+    {% if sign_pwd %}
+    <label>请输入原来的密码：
+      <input type="password" name="pwd0">
+    </label><br>
+    <label>请输入密码：
       <input type="password" name="pwd1">
-    </label>
-    <br>
-    <label>再次输入密码
+    </label><br>
+    <label>请再次输入密码：
       <input type="password" name="pwd2">
-    </label>
-    <input type="submit" value="提交">
+    </label><br>
+    <input type="submit" value="提交"><br>
+    <p>{{message}}</p>
+    {% else %}
+    <input type="submit" value="修改密码">
+    {% endif %}
   </form>
-  <p>{{message}}</p><br>
 
   <!--主界面-->
 

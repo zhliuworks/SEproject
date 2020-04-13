@@ -9,7 +9,9 @@ urlpatterns = [
     path('login/', include('login.urls')),
     path('captcha/', include('captcha.urls')),
     path('about/', views.about),
-    path('editpwd/', views.editpwd),
     path('course/', include('course.urls')),
     path('bbs/', include('bbs.urls')),
+    path('editnickname/',views.editnickname),
+    path('editemail/',views.editemail),
+    path('editpwd/', views.editpwd),
 ]

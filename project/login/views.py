@@ -103,23 +103,61 @@ def logout(request):
 def about(request):
     if not request.session.get('is_login', None):
         return redirect("/login/login/")
-    return render(request, 'login/about.html')
+    sign_nick = False
+    sign_email = False
+    sign_pwd = False
+    return render(request, 'login/about.html', {'sign_nick': sign_nick, 'sign_email': sign_email, 'sign_pwd': sign_pwd})
 
 def editpwd(request):
     if not request.session.get('is_login', None):
         return redirect("/login/login/")
+    user = models.User.objects.get(sno=request.session['user_sno'])
+    pwd0 = request.POST.get('pwd0')
     pwd1 = request.POST.get('pwd1')
     pwd2 = request.POST.get('pwd2')
-    user = models.User.objects.get(sno=request.session['user_sno'])
     message = ""
+    sign = False
 
+    if pwd0 and pwd0 != user.password:
+        message = "原密码输入有误！"
+        sign = True
+        return render(request, 'login/about.html', {'message': message, 'sign_pwd': sign})
     if pwd1 == pwd2 and pwd1:
         user.password = pwd1
         user.save()
+        return redirect("/about/")
     elif not pwd1:
-        message = "密码输入为空！"
-        return render(request, 'login/about.html', {'message': message})
+        sign = True
+        return render(request, 'login/about.html', {'message': message, 'sign_pwd': sign})
     else:
-        message = "两次输入的密码不同！"
-        return render(request, 'login/about.html', {'message': message})
-    return redirect("/about/")
+        message = "两次输入的密码不同，请重新输入！"
+        sign = True
+        return render(request, 'login/about.html', {'message': message, 'sign_pwd': sign})
+
+def editnickname(request):
+    if not request.session.get('is_login', None):
+        return redirect("/login/login/")
+    nickname = request.POST.get('nickname')
+    if nickname:
+        user = models.User.objects.get(sno=request.session['user_sno'])
+        user.nickname = nickname
+        user.save()
+        request.session['user_nickname'] = user.nickname
+        return redirect("/about/")
+    else:
+        sign = True
+        return render(request, 'login/about.html', {'sign_nick': sign})
+
+def editemail(request):
+    if not request.session.get('is_login', None):
+        return redirect("/login/login/")
+    email = request.POST.get('email')
+    if email:
+        user = models.User.objects.get(sno=request.session['user_sno'])
+        user.email = email
+        user.save()
+        request.session['user_email'] = user.email
+        return redirect("/about/")
+    else:
+        sign = True
+        return render(request, 'login/about.html', {'sign_email': sign})
