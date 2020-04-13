@@ -7,6 +7,7 @@
 <body>
     <h3>标题： {{ post.title }}</h3>
     </br>
+    <h3>作者： {{ post.author.name }}</h3>
     <h3>创建时间: {{ post.create_time }}</h3>
     <h3>内容: {{ post.content }}</h3>
     <h3>类别：{{ post.category }}</h3>
@@ -17,6 +18,6 @@
             {% endfor %}
         </ul>
     </h3>
-    <a href="">编辑</a>
+    <a href="/bbs/edit/{{ post.id }}">编辑</a>
 </body>
 </html>

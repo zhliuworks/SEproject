@@ -6,27 +6,41 @@
 </head>
 <form class="form-post" action="/bbs/edit/action/" method="post">
     {% csrf_token %}
-    <div class="form-group">
-          {{ post_form.title.label_tag }}
-          {{ post_form.title}}
-        </div>
-    <br>
-    <div class="form-group">
-          {{ post_form.content.label_tag }}
-          {{ post_form.content}}
-        </div>
-    <br>
-    <div class="form-group">
-          {{ post_form.category.label_tag }}
-          {{ post_form.category}}
-        </div>
-    <br>
-    <div class="form-group">
-          {{ post_form.tag.label_tag }}
-          {{ post_form.tag}}
-        </div>
-    <br>
-    <input type="submit" value="提交">
+    {% if post %}
+       <input type="hidden" name="post_id_hidden"  value="{{ post.id }}">
+       <label>帖子标题
+           <input type="text" name="title" value="{{ post.title }}">
+        </label>
+        </br>
+        <label>帖子内容
+           <input type="text" name="content", value="{{ post.content }}">
+        </label>
+        </br>
+        <input type="submit" value="提交">
+    {% else %}
+        <input type="hidden" name="post_id_hidden"  value="0">
+        <div class="form-group">
+              {{ post_form.title.label_tag }}
+              {{ post_form.title}}
+            </div>
+        <br>
+        <div class="form-group">
+              {{ post_form.content.label_tag }}
+              {{ post_form.content}}
+            </div>
+        <br>
+        <div class="form-group">
+              {{ post_form.category.label_tag }}
+              {{ post_form.category}}
+            </div>
+        <br>
+        <div class="form-group">
+              {{ post_form.tag.label_tag }}
+              {{ post_form.tag}}
+            </div>
+        <br>
+        <input type="submit" value="提交">
+    {% endif %}
 </form>
 <body>
 
