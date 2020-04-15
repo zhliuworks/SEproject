@@ -1,24 +1,60 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <title>帖子详情页</title>
+  <meta charset="UTF-8">
+  <title>帖子详情</title>
 </head>
+
 <body>
-    <h3>标题： {{ post.title }}</h3>
-    </br>
-    <h3>作者： {{ post.author.name }}</h3>
-    <h3>创建时间: {{ post.create_time }}</h3>
-    <h3>内容: {{ post.content }}</h3>
-    <h3>类别：{{ post.category }}</h3>
-    <h3>标签:
-        <ul>
-            {% for tag in tags %}
-            <li> {{ tag }} </li>
-            {% endfor %}
-        </ul>
-    </h3>
-    <a href="/bbs/edit/{{ post.id }}">编辑</a><br>
-    <a href="/bbs/">返回帖子主页</a>
+  <h3>标题： {{ post.title }}</h3>
+  </br>
+  <h3>作者： {{ post.author.name }}</h3>
+  <h3>创建时间: {{ post.create_time }}</h3>
+  <h3>内容: {{ post.content }}</h3>
+  <h3>类别：{{ post.category }}</h3>
+  <h3>标签:
+    <ul>
+      {% for tag in tags %}
+      <li> {{ tag }} </li>
+      {% endfor %}
+    </ul>
+  </h3>
+  <h3>点赞量：{{post.likes}}</h3>
+  {% if sign %}
+  <a href="/bbs/edit/{{ post.id }}">编辑</a><br>
+  {% endif %}
+  <a href="/bbs/comment/{{ post.id }}">评论</a><br>
+  <a href="/bbs/">返回帖子主页</a>
+  <form action="/bbs/like/{{ post.id }}" method="post">
+    {% csrf_token %}
+    <input type="submit" value="点赞">
+  </form>
+  {{ message }}
+
+  <table>
+    <tr>
+      <td>评论者</td>
+      <td>评论时间</td>
+      <td>内容</td>
+      <td>编辑</td>
+    </tr>
+    {% for comment in comments %}
+    <tr>
+      <td>{{ comment.name.name }}</td>
+      <td>{{ comment.created }}</td>
+      <td>{{ comment.content }}</td>
+      <td>
+        {% ifequal user.sno comment.name.sno %}
+        <form action="/bbs/delete/{{ comment.id }}" method="post">
+          {% csrf_token %}
+          <input type="submit" value="删除">
+        </form>
+        {% endifequal %}
+      </td>
+    </tr>
+    {% endfor %}
+  </table>
 </body>
+
 </html>

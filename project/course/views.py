@@ -23,9 +23,10 @@ def course_detail(request, course_cno):
     course = Course.objects.get(pk=course_cno)
     ctx = {
         'course': course,
-        'teachers':course.teacher_set.all()
+        'teachers': course.teacher_set.all()
     }
     return render(request, 'courses/detail.html', ctx)
+
 
 def teachers_index(request):
     if not request.session.get('is_login', None):
@@ -34,12 +35,13 @@ def teachers_index(request):
     ctx = {'teacher_list': teacher_list}
     return render(request, 'teachers/index.html', ctx)
 
+
 def teacher_detail(request, teacher_tno):
     if not request.session.get('is_login', None):
         return redirect("/login/login/")
     teacher = Teacher.objects.get(pk=teacher_tno)
     ctx = {
-        'teacher':teacher,
-        'courses':teacher.course.all()
+        'teacher': teacher,
+        'courses': teacher.course.all()
     }
     return render(request, 'teachers/detail.html', ctx)

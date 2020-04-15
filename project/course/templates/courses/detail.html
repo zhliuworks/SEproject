@@ -1,23 +1,26 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <title>course_detail</title>
+  <meta charset="UTF-8">
+  <title>课程详情</title>
 </head>
+
 <body>
-<a href="/course/courses/">返回课程主页</a> <br>
-<h> 课程名称 {{ course.name }}</h>
-<p> 课程号 {{ course.cno }}</p>
-<p> 学分 {{ course.credit }}</p>
-<p> 平均分 {{ course.mean_score }}</p>
-<p> 挂科率 {{ course.fail_rate }}</p>
-<p>
+  <a href="/course/courses/">返回课程主页</a> <br>
+  <h> 课程名称 {{ course.name }}</h>
+  <p> 课程号 {{ course.cno }}</p>
+  <p> 学分 {{ course.credit }}</p>
+  <p> 平均分 {{ course.mean_score }}</p>
+  <p> 挂科率 {{ course.fail_rate }}</p>
+  <p>
     授课教师
     <ul>
-    {% for teacher in teachers %}
-    <li><a href ="/course/teacher/{{ teacher.tno }}/"> {{ teacher.name }}</a></li>
-    {% endfor %}
-</ul>
-</p>
+      {% for teacher in teachers %}
+      <li><a href="/course/teacher/{{ teacher.tno }}/"> {{ teacher.name }}</a></li>
+      {% endfor %}
+    </ul>
+  </p>
 </body>
+
 </html>

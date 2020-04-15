@@ -105,7 +105,6 @@ USE_TZ = False
 
 STATIC_URL = '/static/'
 
-
 # 配置 MEDIA_ROOT 作为上传文件在服务器中的基本路径
 MEDIA_ROOT = os.path.join(BASE_DIR, 'upload')
 # 配置 MEDIA_URL 作为公用 URL，指向上传文件的基本路径

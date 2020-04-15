@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>评论帖子</title>
+</head>
+
+<body>
+  <form action="/bbs/comment/action/" method="post">
+    {% csrf_token %}
+    <input type="hidden" name="post_id_hidden" value="{{ post.id }}">
+    <input type="text" name="content">
+    <input type="submit" value="提交">
+  </form>
+  <a href="/bbs/{{post.id}}">返回</a>
+</body>
+
+</html>

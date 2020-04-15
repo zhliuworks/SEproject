@@ -2,10 +2,12 @@ from django.db import models
 from imagekit.models import ImageSpecField
 from imagekit.processors import ResizeToFill
 
+
 def user_directory_path(instance, filename):
     ext = filename.split('.').pop()
     filename = '{0}.{1}'.format(instance.sno, ext)
     return filename
+
 
 class User(models.Model):
     gender = (
@@ -38,11 +40,11 @@ class User(models.Model):
     c_time = models.DateTimeField(auto_now_add=True)  # 注册时间
     photo = models.ImageField(upload_to=user_directory_path, blank=True, null=True, default='default.jpg')  # 照片
 
-    photo_clipped = ImageSpecField( # 注意：ImageSpecField 不会生成数据库表的字段
-        source = 'photo',
-        processors = [ResizeToFill(150, 200)],  # 处理成一寸照片的大小
-        format = 'JPEG',  # 处理后的图片格式
-        options = {'quality': 95}  # 处理后的图片质量
+    photo_clipped = ImageSpecField(  # 注意：ImageSpecField 不会生成数据库表的字段
+        source='photo',
+        processors=[ResizeToFill(175, 250)],  # 处理成一寸照片的大小
+        format='JPEG',  # 处理后的图片格式
+        options={'quality': 95}  # 处理后的图片质量
     )
 
     def __str__(self):
