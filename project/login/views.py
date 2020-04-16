@@ -100,10 +100,12 @@ def logout(request):
     request.session.flush()
     return redirect("/login/login/")
 
+
 def about(request):
     if not request.session.get('is_login', None):
         return redirect("/login/login/")
     return render(request, 'login/about.html')
+
 
 def editpwd(request):
     if not request.session.get('is_login', None):

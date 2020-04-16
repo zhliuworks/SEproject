@@ -27,12 +27,14 @@ def course_detail(request, course_cno):
     }
     return render(request, 'courses/detail.html', ctx)
 
+
 def teachers_index(request):
     if not request.session.get('is_login', None):
         return redirect("/login/login/")
     teacher_list = Teacher.objects.order_by("tno")
     ctx = {'teacher_list': teacher_list}
     return render(request, 'teachers/index.html', ctx)
+
 
 def teacher_detail(request, teacher_tno):
     if not request.session.get('is_login', None):
