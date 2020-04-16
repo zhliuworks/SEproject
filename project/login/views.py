@@ -34,6 +34,7 @@ def login(request):
                 request.session['user_sex'] = user.get_sex_display()
                 request.session['user_institute'] = user.get_institute_display()
                 request.session['user_major'] = user.major
+                request.session['user_photo_url'] = user.photo_clipped.url
                 return redirect('/login/index/')
             else:
                 message = '密码不正确！'
@@ -104,24 +105,83 @@ def logout(request):
 def about(request):
     if not request.session.get('is_login', None):
         return redirect("/login/login/")
-    return render(request, 'login/about.html')
+    sign_nick = False
+    sign_email = False
+    sign_photo = False
+    return render(request, 'login/about.html',
+                  {'sign_nick': sign_nick, 'sign_email': sign_email, 'sign_photo': sign_photo})
+
 
 
 def editpwd(request):
     if not request.session.get('is_login', None):
         return redirect("/login/login/")
+    user = models.User.objects.get(sno=request.session['user_sno'])
+    pwd0 = request.POST.get('pwd0')
     pwd1 = request.POST.get('pwd1')
     pwd2 = request.POST.get('pwd2')
-    user = models.User.objects.get(sno=request.session['user_sno'])
     message = ""
 
+    if pwd0 and pwd0 != user.password:
+        message = "修改失败！原密码输入有误！"
+        return render(request, 'login/about.html', {'message': message})
     if pwd1 == pwd2 and pwd1:
         user.password = pwd1
         user.save()
-    elif not pwd1:
-        message = "密码输入为空！"
-        return render(request, 'login/about.html', {'message': message})
+        return redirect("/about/")
     else:
-        message = "两次输入的密码不同！"
+        message = "修改失败！两次输入的密码不同，请重新输入！"
         return render(request, 'login/about.html', {'message': message})
+
+
+def editnickname(request):
+    if not request.session.get('is_login', None):
+        return redirect("/login/login/")
+    nickname = request.POST.get('nickname')
+    if nickname:
+        user = models.User.objects.get(sno=request.session['user_sno'])
+        user.nickname = nickname
+        user.save()
+        request.session['user_nickname'] = user.nickname
+        return redirect("/about/")
+    else:
+        sign = True
+        return render(request, 'login/about.html', {'sign_nick': sign})
+
+
+def editemail(request):
+    if not request.session.get('is_login', None):
+        return redirect("/login/login/")
+    email = request.POST.get('email')
+    users = models.User.objects.all()
+    message = ""
+
+    if not email:
+        sign = True
+        return render(request, 'login/about.html', {'sign_email': sign, "message": message})
+    for user in users:
+        if email == user.email:
+            message = "该邮箱已被注册！"
+            sign = True
+            return render(request, 'login/about.html', {'sign_email': sign, "message": message})
+    user = models.User.objects.get(sno=request.session['user_sno'])
+    user.email = email
+    user.save()
+    request.session['user_email'] = user.email
     return redirect("/about/")
+
+
+def editphoto(request):
+    if not request.session.get('is_login', None):
+        return redirect("/login/login/")
+    if request.method == 'POST':
+        photo = request.FILES.get('photo')
+        if photo:
+            user = models.User.objects.get(sno=request.session['user_sno'])
+            user.photo = photo
+            user.save()
+            request.session['user_photo_url'] = user.photo_clipped.url
+            return redirect("/about/")
+        else:
+            sign = True
+            return render(request, 'login/about.html', {'sign_photo': sign})

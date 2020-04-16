@@ -23,7 +23,7 @@ def course_detail(request, course_cno):
     course = Course.objects.get(pk=course_cno)
     ctx = {
         'course': course,
-        'teachers':course.teacher_set.all()
+        'teachers': course.teacher_set.all()
     }
     return render(request, 'courses/detail.html', ctx)
 
@@ -41,7 +41,7 @@ def teacher_detail(request, teacher_tno):
         return redirect("/login/login/")
     teacher = Teacher.objects.get(pk=teacher_tno)
     ctx = {
-        'teacher':teacher,
-        'courses':teacher.course.all()
+        'teacher': teacher,
+        'courses': teacher.course.all()
     }
     return render(request, 'teachers/detail.html', ctx)

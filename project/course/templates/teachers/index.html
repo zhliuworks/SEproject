@@ -10,13 +10,13 @@
   <h1>教师主页</h1>
   <a href="/course/">返回课程信息页</a>
   {% if teacher_list %}
-    <ul>
+  <ul>
     {% for teacher in teacher_list %}
-        <li><a href="/course/teacher/{{ teacher.tno }}/">{{ teacher.name }}</a></li>
+    <li><a href="/course/teacher/{{ teacher.tno }}/">{{ teacher.name }}</a></li>
     {% endfor %}
-    </ul>
-{% else %}
-    <p>No teachers are available.</p>
+  </ul>
+  {% else %}
+  <p>No teachers are available.</p>
   {% endif %}
 </body>
 

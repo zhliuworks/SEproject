@@ -17,26 +17,39 @@
   <a href="/bbs/edit/0">写博客</a><br>
   <a href="/login/index/">返回主页</a><br>
   <h4>总共有{{length}}个帖子，按发帖时间排序如下：</h4>
-  <table>
-    <tr>
-      <td>序号</td>
-      <td>标题</td>
-      <td>作者</td>
-      <td>类别</td>
-      <td>点赞量</td>
-      <td>创建时间</td>
-    </tr>
-  {% for post in posts %}
-     <tr>
-       <td>{{post.id}}</td>
-       <td><a href="/bbs/{{ post.id }}">{{ post.title }}</a></td>
-       <td>{{ post.author.name }}</td>
-       <td>{{ post.category.name }}</td>
-       <td>{{ post.likes }}</td>
-       <td>{{ post.create_time }}</td>
-     </tr>
-  {% endfor %}
-  </table>
+
+  <div class="table-head">
+    <table>
+      <thead>
+        <tr>
+          <th>序号</th>
+          <th>标题</th>
+          <th>作者</th>
+          <th>类别</th>
+          <th>点赞量</th>
+          <th>创建时间</th>
+        </tr>
+      </thead>
+    </table>
+  </div>
+  <div class="table-body">
+    <table>
+      <tbody>
+        {% for post in posts %}
+        <tr>
+          <td>{{post.id}}</td>
+          <td><a href="/bbs/{{ post.id }}">{{ post.title }}</a></td>
+          <td>{{ post.author.name }}</td>
+          <td>{{ post.category.name }}</td>
+          <td>{{ post.likes }}</td>
+          <td>{{ post.create_time }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
 </div>
 
 {# 实现分页标签的代码 #}

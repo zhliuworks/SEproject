@@ -58,7 +58,3 @@ class Teacher(models.Model):
         ordering = ["-tno"]
         verbose_name = "教师"
         verbose_name_plural = "教师"
-
-
-
-
