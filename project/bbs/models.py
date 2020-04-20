@@ -32,6 +32,12 @@ class Post(models.Model):
 
 class Comment(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE, verbose_name='帖子')
-    name = models.ForeignKey(to='login.User', on_delete=models.CASCADE, verbose_name='评论者')
+    name = models.ForeignKey(to='login.User', related_name='comments', on_delete=models.CASCADE, verbose_name='评论者')
     content = models.TextField(verbose_name='内容')
     created = models.DateTimeField('发布时间', auto_now_add=True)
+    root = models.ForeignKey('self', related_name='root_comment', null=True, blank=True, on_delete=models.CASCADE)
+    parent = models.ForeignKey('self', related_name='parent_comment', null=True, blank=True, on_delete=models.CASCADE)
+    reply_to = models.ForeignKey(to='login.User', related_name="replies", blank=True, null=True, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.content

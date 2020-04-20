@@ -32,29 +32,46 @@
   </form>
   {{ message }}
 
-  <table>
-    <tr>
-      <td>评论者</td>
-      <td>评论时间</td>
-      <td>内容</td>
-      <td>编辑</td>
-    </tr>
-    {% for comment in comments %}
-    <tr>
-      <td>{{ comment.name.name }}</td>
-      <td>{{ comment.created }}</td>
-      <td>{{ comment.content }}</td>
-      <td>
-        {% ifequal user.sno comment.name.sno %}
-        <form action="/bbs/delete/{{ comment.id }}" method="post">
-          {% csrf_token %}
-          <input type="submit" value="删除">
-        </form>
-        {% endifequal %}
-      </td>
-    </tr>
-    {% endfor %}
-  </table>
+  <h3>评论列表</h3>
+  <ul>
+     {% for comment in comments %}
+         {% if not comment.root %}
+         这是第{{ comment.id }}条评论
+         <li>评论者：{{ comment.name.name }}</li>
+         <li>评论时间：{{ comment.created }}</li>
+         <li>评论内容：{{ comment.content }}</li>
+         <a href="/bbs/comment/{{ post.id }}">回复</a>
+            {% ifequal user.sno comment.name.sno %}
+            <form action="/bbs/delete/{{ comment.id }}" method="post">
+             {% csrf_token %}
+              <input type="submit" value="删除">
+            </form>
+            {% endifequal %}
+             <h4>回复列表</h4>
+             {% for reply in comment.root_comment.all %}
+                 <div class="reply">
+                     <span> 这是第{{reply.id }}条评论</span>
+                     <span>{{ reply.name.name }}</span>
+                     <span>({{ reply.created|date:"Y-m-d H:i:s" }})</span>
+                     <span>回复</span>
+                     <span>{{ reply.reply_to.name }}：</span>
+                     <div id="comment_{{ reply.pk }}">
+                       {{ reply.content|safe }}
+                     </div>
+                     {% ifequal user.sno comment.name.sno %}
+                         <form action="/bbs/delete/{{ comment.id }}" method="post">
+                          {% csrf_token %}
+                           <input type="submit" value="删除">
+                         </form>
+                     {% endifequal %}
+                     <a href="/bbs/comment/{{ post.id }}">回复</a>
+                 </div>
+             {% endfor %}
+         {% endif %}
+     {% endfor %}
+   </ul>
+
+
 </body>
 
 </html>

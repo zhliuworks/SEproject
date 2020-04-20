@@ -43,13 +43,13 @@ def bbs_detail(request, post_id):
 def post_edit_page(request, post_id):
     if not request.session.get('is_login', None):
         return redirect("/login/login/")
+    if str(post_id) == '0':
+        post_form = forms.PostForm()
+        return render(request, 'bbs/edit_page.html', locals())
     post = models.Post.objects.get(pk=post_id)
     user = User.objects.get(sno=request.session['user_sno'])
     if user.sno != post.author.sno:
         return HttpResponseRedirect(reverse('bbs:detail', args=(post_id,)))
-    if str(post_id) == '0':
-        post_form = forms.PostForm()
-        return render(request, 'bbs/edit_page.html', locals())
     return render(request, 'bbs/edit_page.html', {'post': post})
 
 
@@ -103,7 +103,8 @@ def post_comment_page(request, post_id):
     if not request.session.get('is_login', None):
         return redirect("/login/login/")
     post = models.Post.objects.get(pk=post_id)
-    return render(request, 'bbs/comment_page.html', {'post': post})
+    comment_form = forms.CommentForm()
+    return render(request, 'bbs/comment_page.html', locals())
 
 
 def post_comment_page_action(request):
@@ -115,7 +116,19 @@ def post_comment_page_action(request):
         return HttpResponseRedirect(reverse('bbs:comment', args=(post_id,)))
     post = models.Post.objects.get(pk=post_id)
     name = User.objects.get(sno=request.session['user_sno'])
-    comment_new = models.Comment.objects.create(post=post, name=name, content=content)
+    if request.method == 'POST':
+        comment_form = forms.CommentForm(request.POST)
+        if comment_form.is_valid():
+            content = comment_form.cleaned_data['content']
+            parent = comment_form.cleaned_data['parent']
+            if parent:
+                root = parent.root if parent.root else parent
+                reply_to = parent.name
+            else:
+                root = None
+                reply_to = None
+            comment = models.Comment.objects.create(post=post, name=name, content=content, parent=parent, root=root, reply_to=reply_to)
+
     return HttpResponseRedirect(reverse('bbs:detail', args=(post_id,)))
 
 

@@ -10,7 +10,9 @@
   <form action="/bbs/comment/action/" method="post">
     {% csrf_token %}
     <input type="hidden" name="post_id_hidden" value="{{ post.id }}">
-    <input type="text" name="content">
+    {% for field in comment_form %}
+        {{ field.label }}:{{ field }}
+    {% endfor %}
     <input type="submit" value="提交">
   </form>
   <a href="/bbs/{{post.id}}">返回</a>
