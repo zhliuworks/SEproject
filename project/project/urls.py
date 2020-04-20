@@ -19,4 +19,5 @@ urlpatterns = [
     path('editpwd/', views.editpwd),
     path('editphoto/', views.editphoto),
     re_path(r'^media/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT}),
+    url(r'^search/', include('haystack.urls')),
 ]

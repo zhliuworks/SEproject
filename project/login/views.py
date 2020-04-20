@@ -112,7 +112,6 @@ def about(request):
                   {'sign_nick': sign_nick, 'sign_email': sign_email, 'sign_photo': sign_photo})
 
 
-
 def editpwd(request):
     if not request.session.get('is_login', None):
         return redirect("/login/login/")
