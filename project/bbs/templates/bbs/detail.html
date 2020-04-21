@@ -24,7 +24,7 @@
   {% if sign %}
   <a href="/bbs/edit/{{ post.id }}">编辑</a><br>
   {% endif %}
-  <a href="/bbs/comment/{{ post.id }}">评论</a><br>
+  <a href="/bbs/comment/{{ post.id }}/0">评论</a><br>
   <a href="/bbs/">返回帖子主页</a>
   <form action="/bbs/like/{{ post.id }}" method="post">
     {% csrf_token %}
@@ -40,7 +40,7 @@
          <li>评论者：{{ comment.name.name }}</li>
          <li>评论时间：{{ comment.created }}</li>
          <li>评论内容：{{ comment.content }}</li>
-         <a href="/bbs/comment/{{ post.id }}">回复</a>
+         <a href="/bbs/comment/{{ post.id }}/{{ comment.id }}">回复</a>
             {% ifequal user.sno comment.name.sno %}
             <form action="/bbs/delete/{{ comment.id }}" method="post">
              {% csrf_token %}
@@ -58,13 +58,13 @@
                      <div id="comment_{{ reply.pk }}">
                        {{ reply.content|safe }}
                      </div>
-                     {% ifequal user.sno comment.name.sno %}
-                         <form action="/bbs/delete/{{ comment.id }}" method="post">
+                     {% ifequal user.sno reply.name.sno %}
+                         <form action="/bbs/delete/{{ reply.id }}" method="post">
                           {% csrf_token %}
                            <input type="submit" value="删除">
                          </form>
                      {% endifequal %}
-                     <a href="/bbs/comment/{{ post.id }}">回复</a>
+                     <a href="/bbs/comment/{{ post.id }}/{{ reply.id }}">回复</a>
                  </div>
              {% endfor %}
          {% endif %}

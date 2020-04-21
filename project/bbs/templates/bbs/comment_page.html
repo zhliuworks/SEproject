@@ -11,7 +11,7 @@
     {% csrf_token %}
     <input type="hidden" name="post_id_hidden" value="{{ post.id }}">
     {% for field in comment_form %}
-        {{ field.label }}:{{ field }}
+        {{ field.label }} {{field}}
     {% endfor %}
     <input type="submit" value="提交">
   </form>

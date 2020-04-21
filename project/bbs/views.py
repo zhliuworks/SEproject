@@ -99,11 +99,12 @@ def like_post(request, post_id):
         return render(request, "bbs/detail.html", {'message': message, 'post': post, 'tags': post.tags.all()})
 
 
-def post_comment_page(request, post_id):
+def post_comment_page(request, post_id, comment_id):
     if not request.session.get('is_login', None):
         return redirect("/login/login/")
     post = models.Post.objects.get(pk=post_id)
-    comment_form = forms.CommentForm()
+    data = {'reply_comment_id': comment_id}
+    comment_form = forms.CommentForm(data)
     return render(request, 'bbs/comment_page.html', locals())
 
 
