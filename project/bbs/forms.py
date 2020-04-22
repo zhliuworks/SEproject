@@ -14,7 +14,7 @@ class PostForm(forms.Form):
 
 class CommentForm(forms.Form):
     content = forms.CharField(widget=forms.widgets.TextInput())
-    reply_comment_id = forms.IntegerField()
+    reply_comment_id = forms.IntegerField(widget=forms.widgets.HiddenInput())
 
     def clean_reply_comment_id(self):
         reply_comment_id = self.cleaned_data['reply_comment_id']
@@ -27,6 +27,3 @@ class CommentForm(forms.Form):
         else:
             raise forms.ValidationError('回复出错')
         return reply_comment_id
-
-
-

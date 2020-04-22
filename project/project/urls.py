@@ -20,4 +20,10 @@ urlpatterns = [
     path('editphoto/', views.editphoto),
     re_path(r'^media/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT}),
     url(r'^search/', include('haystack.urls')),
+    path('info/<int:sno>', views.info),
+    path('likes/', views.likes),
+    path('posts/', views.posts),
+    path('comments/', views.comments),
+    path('send/<int:sno>', views.send),
+    path('mailbox/', views.mailbox),
 ]

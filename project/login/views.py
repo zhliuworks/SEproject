@@ -1,6 +1,8 @@
 from django.shortcuts import render
 from django.shortcuts import redirect
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage, InvalidPage
 from . import forms, models
+from bbs.models import Post, Comment, Tag, Category, Message
 
 
 def index(request):
@@ -184,3 +186,99 @@ def editphoto(request):
         else:
             sign = True
             return render(request, 'login/about.html', {'sign_photo': sign})
+
+def info(request, sno):
+    if not request.session.get('is_login', None):
+        return redirect("/login/login/")
+    user = models.User.objects.get(sno=sno)
+    return render(request, 'login/info.html', {'user': user})
+
+def likes(request):
+    if not request.session.get('is_login', None):
+        return redirect("/login/login/")
+    user = models.User.objects.get(sno=request.session['user_sno'])
+    likes_list = user.like_users.order_by('-create_time')
+    paginator = Paginator(likes_list, 3)
+    if request.method == "GET":
+        page = request.GET.get('page')
+        try:
+            posts = paginator.page(page)
+        except PageNotAnInteger:
+            posts = paginator.page(1)
+        except InvalidPage:
+            return HttpResponse('找不到页面的内容')
+        except EmptyPage:
+            posts = paginator.page(paginator.num_pages)
+    else:
+        posts = paginator.page(1)
+    return render(request, 'login/likes.html', {'posts': posts, "length": len(likes_list)})
+
+def posts(request):
+    if not request.session.get('is_login', None):
+        return redirect("/login/login/")
+    user = models.User.objects.get(sno=request.session['user_sno'])
+    posts_list = user.author.order_by('-create_time')
+    paginator = Paginator(posts_list, 3)
+    if request.method == "GET":
+        page = request.GET.get('page')
+        try:
+            posts = paginator.page(page)
+        except PageNotAnInteger:
+            posts = paginator.page(1)
+        except InvalidPage:
+            return HttpResponse('找不到页面的内容')
+        except EmptyPage:
+            posts = paginator.page(paginator.num_pages)
+    else:
+        posts = paginator.page(1)
+    return render(request, 'login/posts.html', {'posts': posts, "length": len(posts_list)})
+
+def comments(request):
+    if not request.session.get('is_login', None):
+        return redirect("/login/login/")
+    user = models.User.objects.get(sno=request.session['user_sno'])
+    comments_list = user.comments.order_by('-created')
+    paginator = Paginator(comments_list, 3)
+    if request.method == "GET":
+        page = request.GET.get('page')
+        try:
+            comments = paginator.page(page)
+        except PageNotAnInteger:
+            comments = paginator.page(1)
+        except InvalidPage:
+            return HttpResponse('找不到页面的内容')
+        except EmptyPage:
+            comments = paginator.page(paginator.num_pages)
+    else:
+        comments = paginator.page(1)
+    return render(request, 'login/comments.html', {'comments': comments, "length": len(comments_list)})
+
+def send(request, sno):
+    if not request.session.get('is_login', None):
+        return redirect("/login/login/")
+    sender = models.User.objects.get(sno=request.session['user_sno'])
+    receiver = models.User.objects.get(sno=sno)
+    title = request.POST.get('title')
+    content = request.POST.get('content')
+    Message.objects.create(title=title, content=content, sender=sender, receiver=receiver)
+    return info(request, sno)
+
+def mailbox(request):
+    if not request.session.get('is_login', None):
+        return redirect("/login/login/")
+    user = models.User.objects.get(sno=request.session['user_sno'])
+    messages_list = Message.objects.filter(receiver=user).order_by('-created')
+    paginator = Paginator(messages_list, 3)
+    if request.method == "GET":
+        page = request.GET.get('page')
+        try:
+            messages = paginator.page(page)
+        except PageNotAnInteger:
+            messages = paginator.page(1)
+        except InvalidPage:
+            return HttpResponse('找不到页面的内容')
+        except EmptyPage:
+            messages = paginator.page(paginator.num_pages)
+    else:
+        messages = paginator.page(1)
+    return render(request, 'login/mailbox.html', {'messages': messages, "length": len(messages_list)})

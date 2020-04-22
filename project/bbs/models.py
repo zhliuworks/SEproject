@@ -41,3 +41,14 @@ class Comment(models.Model):
 
     def __str__(self):
         return self.content
+
+
+class Message(models.Model):
+    title = models.CharField(max_length=32)
+    content = models.TextField(null=True)
+    sender = models.ForeignKey(to='login.User', on_delete=models.CASCADE, verbose_name='发送者', related_name='sender')
+    receiver = models.ForeignKey(to='login.User', on_delete=models.CASCADE, verbose_name='接收者', related_name='receiver')
+    created = models.DateTimeField('发送时间', auto_now_add=True)
+
+    def __str__(self):
+        return self.title
