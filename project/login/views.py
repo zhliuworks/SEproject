@@ -197,10 +197,14 @@ def info(request, sno):
     user1 = models.User.objects.get(sno=request.session['user_sno'])
     user2 = models.User.objects.get(sno=sno)
     if user1.sno == user2.sno:
-        sign = False
+        sign1 = False
     else:
-        sign = True
-    return render(request, 'login/info.html', {'user': user2, 'sign': sign})
+        sign1 = True
+    if user1.sno != user2.sno and user2 in user1.follow.all():
+        sign2 = True
+    else:
+        sign2 = False
+    return render(request, 'login/info.html', {'user': user2, 'sign1': sign1, 'sign2': sign2})
 
 
 def likes(request):
@@ -223,6 +227,7 @@ def likes(request):
         posts = paginator.page(1)
     return render(request, 'login/likes.html', {'posts': posts, "length": len(likes_list)})
 
+
 def posts(request):
     if not request.session.get('is_login', None):
         return redirect("/login/login/")
@@ -242,6 +247,7 @@ def posts(request):
     else:
         posts = paginator.page(1)
     return render(request, 'login/posts.html', {'posts': posts, "length": len(posts_list)})
+
 
 def comments(request):
     if not request.session.get('is_login', None):
@@ -263,6 +269,7 @@ def comments(request):
         comments = paginator.page(1)
     return render(request, 'login/comments.html', {'comments': comments, "length": len(comments_list)})
 
+
 def send(request, sno):
     if not request.session.get('is_login', None):
         return redirect("/login/login/")
@@ -272,6 +279,7 @@ def send(request, sno):
     content = request.POST.get('content')
     Message.objects.create(title=title, content=content, sender=sender, receiver=receiver)
     return info(request, sno)
+
 
 def mailbox(request):
     if not request.session.get('is_login', None):
@@ -299,19 +307,33 @@ def follow(request, sno):
         return redirect("/login/login/")
     user = models.User.objects.get(sno=request.session['user_sno'])
     followed_user = models.User.objects.get(sno=sno)
-    if user.sno == followed_user.sno:
-        sign = False
-    else:
-        sign = True
-    message = ""
+    sign1 = True
+    message1 = ""
     if followed_user not in user.follow.all():
         followed_user.fans += 1
         followed_user.save()
         user.follow.add(followed_user)
         user.save()
     else:
-        message = "您已经关注过TA了"
-    ctx = {'user': followed_user, 'message': message, 'sign': sign}
+        message1 = "您已经关注过TA了"
+    sign2 = True
+    ctx = {'user': followed_user, 'message1': message1, 'sign1': sign1, 'sign2': sign2}
+    return render(request, 'login/info.html', ctx)
+
+
+def follow_cancel(request, sno):
+    if not request.session.get('is_login', None):
+        return redirect("/login/login/")
+    user = models.User.objects.get(sno=request.session['user_sno'])
+    followed_user = models.User.objects.get(sno=sno)
+    message1 = ""
+    followed_user.fans -= 1
+    followed_user.save()
+    user.follow.remove(followed_user)
+    user.save()
+    sign2 = False
+    sign1 = True
+    ctx = {'user': followed_user, 'message1': message1, 'sign1': sign1, 'sign2': sign2}
     return render(request, 'login/info.html', ctx)
 
 

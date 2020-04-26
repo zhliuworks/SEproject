@@ -28,4 +28,5 @@ urlpatterns = [
     path('mailbox/', views.mailbox),
     path('follow/<int:sno>', views.follow),
     path('follows/', views.follows),
+    path('follow_cancel/<int:sno>', views.follow_cancel),
 ]

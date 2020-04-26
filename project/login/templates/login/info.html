@@ -119,13 +119,22 @@
     <button type="button" class="btn btn-default navbar-btn" data-toggle="modal" data-target="#myModal">发送私信</button>
   </div>
   <br>
-  {% if sign %}
+  <div class="text-center">
+  {% if sign1 %}
   <form action="/follow/{{ user.sno }}" method="post">
     {% csrf_token %}
     <input type="submit" value="关注">
   </form>
   {% endif %}
-  {{ message }}
+  {{ message1 }}
+  <br>
+  {% if sign2 %}
+  <form action="/follow_cancel/{{ user.sno }}" method="post">
+    {% csrf_token %}
+    <input type="submit" value="取消关注">
+  </form>
+  {% endif %}
+  </div>
 
   <!--按钮-->
 
