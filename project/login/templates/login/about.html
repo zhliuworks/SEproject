@@ -46,6 +46,7 @@
               <li><a href="/posts/">我的发布</a></li>
               <li><a href="/comments/">我的评论</a></li>
               <li><a href="/mailbox/">我的信箱</a></li>
+              <li><a href="/follows/">我的关注</a> </li>
             </ul>
           </li>
           <li><a href="/login/logout/">登出</a></li>
@@ -73,7 +74,7 @@
           <tr>
             <td class="text-center"><b>学号</b></td>
             <td class="text-center"> {{request.session.user_sno}}</td>
-            <td rowspan="7" align="center">
+            <td rowspan="8" align="center">
               <img id="photo" src="{{ request.session.user_photo_url }}" alt="头像"><br><br>
               <form action="/editphoto/" method="post" enctype="multipart/form-data">
                 {% csrf_token %}
@@ -138,6 +139,10 @@
                 {% endif %}
               </td>
             </form>
+          </tr>
+          <tr>
+            <td class="text-center"><b>粉丝数</b></td>
+            <td class="text-center"> {{request.session.user_fans}}</td>
           </tr>
         </tbody>
       </table>

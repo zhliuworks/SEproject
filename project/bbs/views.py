@@ -88,6 +88,7 @@ def like_post(request, post_id):
         return redirect("/login/login/")
     post = models.Post.objects.get(pk=post_id)
     user = User.objects.get(sno=request.session['user_sno'])
+    comments = post.comment_set.all()
     message = ""
     if user not in post.like_users.all():
         post.likes += 1
@@ -96,7 +97,8 @@ def like_post(request, post_id):
         return HttpResponseRedirect(reverse('bbs:detail', args=(post_id,)))
     else:
         message = "您已经点过赞了！"
-        return render(request, "bbs/detail.html", {'message': message, 'post': post, 'tags': post.tags.all()})
+        ctx = {'message': message, 'post': post, 'tags': post.tags.all(), 'comments': comments}
+        return render(request, "bbs/detail.html", ctx)
 
 
 def post_comment_page(request, post_id, comment_id):

@@ -1,4 +1,6 @@
 from django.shortcuts import render
+from django.http import HttpResponse, HttpResponseRedirect
+from django.urls import reverse
 from django.shortcuts import redirect
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage, InvalidPage
 from . import forms, models
@@ -36,6 +38,7 @@ def login(request):
                 request.session['user_sex'] = user.get_sex_display()
                 request.session['user_institute'] = user.get_institute_display()
                 request.session['user_major'] = user.major
+                request.session['user_fans'] = user.fans
                 request.session['user_photo_url'] = user.photo_clipped.url
                 return redirect('/login/index/')
             else:
@@ -187,11 +190,18 @@ def editphoto(request):
             sign = True
             return render(request, 'login/about.html', {'sign_photo': sign})
 
+
 def info(request, sno):
     if not request.session.get('is_login', None):
         return redirect("/login/login/")
-    user = models.User.objects.get(sno=sno)
-    return render(request, 'login/info.html', {'user': user})
+    user1 = models.User.objects.get(sno=request.session['user_sno'])
+    user2 = models.User.objects.get(sno=sno)
+    if user1.sno == user2.sno:
+        sign = False
+    else:
+        sign = True
+    return render(request, 'login/info.html', {'user': user2, 'sign': sign})
+
 
 def likes(request):
     if not request.session.get('is_login', None):
@@ -282,3 +292,45 @@ def mailbox(request):
     else:
         messages = paginator.page(1)
     return render(request, 'login/mailbox.html', {'messages': messages, "length": len(messages_list)})
+
+
+def follow(request, sno):
+    if not request.session.get('is_login', None):
+        return redirect("/login/login/")
+    user = models.User.objects.get(sno=request.session['user_sno'])
+    followed_user = models.User.objects.get(sno=sno)
+    if user.sno == followed_user.sno:
+        sign = False
+    else:
+        sign = True
+    message = ""
+    if followed_user not in user.follow.all():
+        followed_user.fans += 1
+        followed_user.save()
+        user.follow.add(followed_user)
+        user.save()
+    else:
+        message = "您已经关注过TA了"
+    ctx = {'user': followed_user, 'message': message, 'sign': sign}
+    return render(request, 'login/info.html', ctx)
+
+
+def follows(request):
+    if not request.session.get('is_login', None):
+        return redirect("/login/login/")
+    user = models.User.objects.get(sno=request.session['user_sno'])
+    follow_list = user.follow.order_by('-fans')
+    paginator = Paginator(follow_list, 3)
+    if request.method == "GET":
+        page = request.GET.get('page')
+        try:
+            follow_set = paginator.page(page)
+        except PageNotAnInteger:
+            follow_set = paginator.page(1)
+        except InvalidPage:
+            return HttpResponse('找不到页面的内容')
+        except EmptyPage:
+            follow_set = paginator.page(paginator.num_pages)
+    else:
+        follow_set = paginator.page(1)
+    return render(request, 'login/follows.html', {'follow_set': follow_set, "length": len(follow_list)})

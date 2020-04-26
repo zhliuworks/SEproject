@@ -39,6 +39,8 @@ class User(models.Model):
     major = models.CharField(max_length=256, default='--')  # 专业（暂时为填写）
     c_time = models.DateTimeField(auto_now_add=True)  # 注册时间
     photo = models.ImageField(upload_to=user_directory_path, blank=True, null=True, default='default.jpg')  # 照片
+    follow = models.ManyToManyField('self', related_name='follow_people', null=True, blank=True, verbose_name='关注')
+    fans = models.IntegerField(default=0)
 
     photo_clipped = ImageSpecField(  # 注意：ImageSpecField 不会生成数据库表的字段
         source='photo',
