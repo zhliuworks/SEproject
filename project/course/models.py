@@ -1,4 +1,11 @@
 from django.db import models
+from login.models import User
+
+
+def file_directory_path(instance, filename):
+    ext = filename.split('.').pop()
+    filename = '{0}{1}.{2}'.format(instance.title, instance.course.cno, ext)
+    return filename
 
 
 class Course(models.Model):
@@ -48,7 +55,6 @@ class Teacher(models.Model):
     department = models.CharField(max_length=256, default='--')  # 系（暂时为填写）
     address = models.CharField(max_length=256, default='--')  # 办公室地点
     resume = models.CharField(max_length=2048, default='略')  # 简历
-
     course = models.ManyToManyField(Course, verbose_name='课程')  # 教授课程
 
     def __str__(self):
@@ -58,3 +64,22 @@ class Teacher(models.Model):
         ordering = ["-tno"]
         verbose_name = "教师"
         verbose_name_plural = "教师"
+
+
+class File(models.Model):
+    title = models.CharField(max_length=128)
+    course = models.ForeignKey(Course, on_delete=models.CASCADE,)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    introduction = models.CharField(max_length=256, null=True)
+    likes = models.IntegerField(default=0)
+    downloads = models.IntegerField(default=0)
+    create_time = models.DateTimeField('上传时间', auto_now_add=True)
+    file = models.FileField(upload_to=file_directory_path)
+
+    def __str__(self):
+        return self.title
+
+    class Meta:
+        ordering = ["-create_time"]
+        verbose_name = "文件"
+        verbose_name_plural = "文件"

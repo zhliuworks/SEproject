@@ -86,6 +86,7 @@
               <li><a href="/comments/">我的评论</a></li>
               <li><a href="/mailbox/">我的信箱</a></li>
               <li><a href="/follows/">我的关注</a></li>
+              <li><a href="/followers/">关注我的</a></li>
             </ul>
           </li>
           <li><a href="/login/logout/">登出</a></li>
@@ -96,8 +97,9 @@
   <!--基础导航栏-->
 
   <ul class="nav nav-tabs" role="tablist">
-    <li role="presentation" class="active"><a href="#course" role="tab" data-toggle="tab">课程主页</a></li>
-    <li role="presentation"><a href="#teacher" role="tab" data-toggle="tab">老师主页</a></li>
+    <li role="presentation" class="active"><a href="#course" role="tab" data-toggle="tab">课程列表</a></li>
+    <li role="presentation"><a href="#teacher" role="tab" data-toggle="tab">老师列表</a></li>
+    <li role="presentation"><a href="#file" role="tab" data-toggle="tab">资料列表</a></li>
     <form class="navbar-form navbar-left">
       <div class="form-group">
         <input type="text" class="form-control" placeholder="搜索">
@@ -107,6 +109,14 @@
         &nbsp&nbsp&nbsp&nbsp&nbsp搜索
       </button>
     </form>
+    <ul style="float: right;">
+      <a href="/course/upload/">
+        <button type="button" class="btn btn-default">
+          上传资料
+        </button>
+        &nbsp&nbsp&nbsp&nbsp
+      </a>
+    </ul>
   </ul>
   <div class="tab-content">
 
@@ -134,11 +144,35 @@
       {% endif %}
     </div>
 
+    <div class="tab-pane" id="file" role="tabpanel">
+      {% if file_list %}
+      {% for file in file_list %}
+      <button type="button" class="list-group-item">
+        <li>
+          题目：{{ file.title }}&nbsp&nbsp
+          课号：<a href="/course/course/{{ file.course.cno }}/">{{ file.course.cno }}</a>&nbsp&nbsp
+          上传者：<a href="/info/{{ file.user.sno }}">{{ file.user.name }}</a><br>
+          点赞数：{{ file.likes }}&nbsp&nbsp
+          下载数：{{ file.downloads }}&nbsp&nbsp
+          上传时间：{{ file.create_time }}<br>
+          简介：{{ file.introduction }}<br>
+          文件名：{{file.file}}
+          <a href="/course/download/{{ file.id }}">点击下载</a>
+        </li>
+      </button>
+      {% endfor %}
+      {% else %}
+      <p>No files are available.</p>
+      {% endif %}
+    </div>
+
   </div>
   </div>
   -->
   <!--标签页-->
   <!--列表组-->
+
+  <!--
   <div class="text-center">
     <nav aria-label="Page navigation">
       <ul class="pagination">
@@ -160,7 +194,8 @@
       </ul>
     </nav>
   </div>
-  <!--分页-->
+分页-->
+
 </body>
 
 </html>
