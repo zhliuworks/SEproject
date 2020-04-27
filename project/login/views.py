@@ -356,3 +356,49 @@ def follows(request):
     else:
         follow_set = paginator.page(1)
     return render(request, 'login/follows.html', {'follow_set': follow_set, "length": len(follow_list)})
+
+def posts_ta(request, sno):
+    if not request.session.get('is_login', None):
+        return redirect("/login/login/")
+    user = models.User.objects.get(sno=sno)
+    posts_list = user.author.order_by('-create_time')
+    paginator = Paginator(posts_list, 3)
+    if request.method == "GET":
+        page = request.GET.get('page')
+        try:
+            posts = paginator.page(page)
+        except PageNotAnInteger:
+            posts = paginator.page(1)
+        except InvalidPage:
+            return HttpResponse('找不到页面的内容')
+        except EmptyPage:
+            posts = paginator.page(paginator.num_pages)
+    else:
+        posts = paginator.page(1)
+    return render(request, 'login/posts_ta.html', {'user': user, 'posts': posts, "length": len(posts_list)})
+
+def followers(request):
+    if not request.session.get('is_login', None):
+        return redirect("/login/login/")
+    me = models.User.objects.get(sno=request.session['user_sno'])
+    follower_list = []
+    users = models.User.objects.all()
+    for user in users:
+        follow_list = user.follow.order_by('-fans')
+        if me in follow_list:
+            follower_list.append(user)
+        
+    paginator = Paginator(follower_list, 3)
+    if request.method == "GET":
+        page = request.GET.get('page')
+        try:
+            follower_set = paginator.page(page)
+        except PageNotAnInteger:
+            follower_set = paginator.page(1)
+        except InvalidPage:
+            return HttpResponse('找不到页面的内容')
+        except EmptyPage:
+            follower_set = paginator.page(paginator.num_pages)
+    else:
+        follower_set = paginator.page(1)
+    return render(request, 'login/followers.html', {'follower_set': follower_set, "length": len(follower_list)})

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>{{ user.name }}的发布</title>
+</head>
+
+<body>
+  <h3>{{ user.name }}的发布</h3>
+  <h4>总共有{{length}}个TA发布的帖子，按发帖时间排序如下：</h4>
+
+  <div class="table-head">
+    <table>
+      <thead>
+        <tr>
+          <th>序号</th>
+          <th>标题</th>
+          <th>作者</th>
+          <th>类别</th>
+          <th>点赞量</th>
+          <th>创建时间</th>
+        </tr>
+      </thead>
+    </table>
+  </div>
+  <div class="table-body">
+    <table>
+      <tbody>
+        {% for post in posts %}
+        <tr>
+          <td>{{post.id}}</td>
+          <td><a href="/bbs/{{ post.id }}">{{ post.title }}</a></td>
+          <td>{{ post.author.name }}</td>
+          <td>{{ post.category.name }}</td>
+          <td>{{ post.likes }}</td>
+          <td>{{ post.create_time }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  {# 实现分页标签的代码 #}
+  {# 这里使用 bootstrap 渲染页面 #}
+  <div id="pages" class="text-center">
+    <nav>
+      <ul class="pagination">
+        <li class="step-links">
+          {% if posts.has_previous %}
+          <a class='active' href="?page={{ posts.previous_page_number }}">上一页</a>
+          {% endif %}
+
+          <span class="current">
+            Page {{ posts.number }} of {{ posts.paginator.num_pages }}</span>
+
+          {% if posts.has_next %}
+          <a class='active' href="?page={{ posts.next_page_number }}">下一页</a>
+          {% endif %}
+        </li>
+      </ul>
+    </nav>
+  </div>
+  <a href="/login/index">返回主页</a>
+</body>
+
+</html>
