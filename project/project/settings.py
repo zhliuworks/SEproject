@@ -124,3 +124,5 @@ HAYSTACK_CONNECTIONS = {
 
 # 数据库改变时自动更新索引
 HAYSTACK_SIGNAL_PROCESSOR = 'haystack.signals.RealtimeSignalProcessor'
+
+APPEND_SLASH = False

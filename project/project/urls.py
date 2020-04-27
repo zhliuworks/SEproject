@@ -29,4 +29,6 @@ urlpatterns = [
     path('follow/<int:sno>', views.follow),
     path('follows/', views.follows),
     path('follow_cancel/<int:sno>', views.follow_cancel),
+    path('posts/<int:sno>', views.posts_ta),
+    path('followers/', views.followers),
 ]
