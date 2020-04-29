@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title></title>
+  </head>
+  <body>
+    <form action="/course/upload/action/" method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+      <div class="form-group">
+        {{ upload_form.title.label_tag }}
+        {{ upload_form.title}}
+      </div>
+      <br>
+      <div class="form-group">
+        {{ upload_form.course.label_tag }}
+        {{ upload_form.course}}
+      </div>
+      <br>
+      <div class="form-group">
+        {{ upload_form.introduction.label_tag }}
+        {{ upload_form.introduction}}
+      </div>
+      <br>
+      <div class="form-group">
+        {{ upload_form.file.label_tag }}
+        {{ upload_form.file}}
+      </div>
+      <br>
+       <input type="submit" value="上传">
+    </form>
+    <br>
+
+    <form action="/course/" method="post">
+     {% csrf_token %} 
+    <input type="submit" value="返回">
+    </form>
+    <br>
+    {{ message }}
+  </body>
+</html>

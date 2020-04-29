@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>关注我的</title>
+</head>
+<body>
+<h3>关注我的</h3>
+  <h4>总共有{{length}}个关注我的人，按粉丝数排序如下：</h4>
+
+  <div class="table-head">
+    <table>
+      <thead>
+        <tr>
+          <th>学号</th>
+          <th>姓名</th>
+          <th>性别</th>
+          <th>学院</th>
+          <th>粉丝数</th>
+        </tr>
+      </thead>
+    </table>
+  </div>
+  <div class="table-body">
+    <table>
+      <tbody>
+        {% for follower in follower_set %}
+        <tr>
+          <td>{{follower.sno}}</td>
+          <td><a href="/info/{{ follower.sno }}">{{ follower.name }}</a></td>
+          <td>{{ follower.get_sex_display }}</td>
+          <td>{{ follower.get_institute_display }}</td>
+          <td>{{ follower.fans }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  {# 实现分页标签的代码 #}
+  {# 这里使用 bootstrap 渲染页面 #}
+  <div id="pages" class="text-center">
+    <nav>
+      <ul class="pagination">
+        <li class="step-links">
+          {% if follower_set.has_previous %}
+          <a class='active' href="?page={{ follower_set.previous_page_number }}">上一页</a>
+          {% endif %}
+
+          <span class="current">
+            Page {{ follower_set.number }} of {{ follower_set.paginator.num_pages }}</span>
+
+          {% if follower_set.has_next %}
+          <a class='active' href="?page={{ follower_set.next_page_number }}">下一页</a>
+          {% endif %}
+        </li>
+      </ul>
+    </nav>
+  </div>
+  <a href="/login/index">返回主页</a>
+</body>
+</html>
