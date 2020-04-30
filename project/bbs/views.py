@@ -10,7 +10,7 @@ def index(request):
     if not request.session.get('is_login', None):
         return redirect("/login/login/")
     posts_list = models.Post.objects.order_by('-create_time')
-    paginator = Paginator(posts_list, 3)
+    paginator = Paginator(posts_list, 10)
     if request.method == "GET":
         page = request.GET.get('page')
         try:
@@ -32,11 +32,16 @@ def bbs_detail(request, post_id):
     post = models.Post.objects.get(pk=post_id)
     user = User.objects.get(sno=request.session['user_sno'])
     comments = models.Comment.objects.filter(post=post).order_by("-created")
+    if user not in post.like_users.all():
+        sign_like = False
+    else:
+        sign_like = True
     if user.sno == post.author.sno:
         sign = True
     else:
         sign = False
-    ctx = {'post': post, 'tags': post.tags.all(), 'sign': sign, 'comments': comments, 'user': user}
+    ctx = {'post': post, 'tags': post.tags.all(), 'sign': sign, 'sign_like': sign_like,
+           'comments': comments, 'user': user}
     return render(request, 'bbs/detail.html', ctx)
 
 
@@ -89,15 +94,14 @@ def like_post(request, post_id):
     post = models.Post.objects.get(pk=post_id)
     user = User.objects.get(sno=request.session['user_sno'])
     comments = post.comment_set.all()
-    message = ""
+    sign_like = True
     if user not in post.like_users.all():
         post.likes += 1
         post.like_users.add(user)
         post.save()
         return HttpResponseRedirect(reverse('bbs:detail', args=(post_id,)))
     else:
-        message = "您已经点过赞了！"
-        ctx = {'message': message, 'post': post, 'tags': post.tags.all(), 'comments': comments}
+        ctx = {'sign_like': sign_like, 'post': post, 'tags': post.tags.all(), 'comments': comments}
         return render(request, "bbs/detail.html", ctx)
 
 
