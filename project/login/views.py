@@ -212,7 +212,7 @@ def likes(request):
         return redirect("/login/login/")
     user = models.User.objects.get(sno=request.session['user_sno'])
     likes_list = user.like_users.order_by('-create_time')
-    paginator = Paginator(likes_list, 3)
+    paginator = Paginator(likes_list, 10)
     if request.method == "GET":
         page = request.GET.get('page')
         try:
@@ -233,7 +233,7 @@ def posts(request):
         return redirect("/login/login/")
     user = models.User.objects.get(sno=request.session['user_sno'])
     posts_list = user.author.order_by('-create_time')
-    paginator = Paginator(posts_list, 3)
+    paginator = Paginator(posts_list, 10)
     if request.method == "GET":
         page = request.GET.get('page')
         try:
@@ -254,7 +254,7 @@ def comments(request):
         return redirect("/login/login/")
     user = models.User.objects.get(sno=request.session['user_sno'])
     comments_list = user.comments.order_by('-created')
-    paginator = Paginator(comments_list, 3)
+    paginator = Paginator(comments_list, 10)
     if request.method == "GET":
         page = request.GET.get('page')
         try:
@@ -286,7 +286,7 @@ def mailbox(request):
         return redirect("/login/login/")
     user = models.User.objects.get(sno=request.session['user_sno'])
     messages_list = Message.objects.filter(receiver=user).order_by('-created')
-    paginator = Paginator(messages_list, 3)
+    paginator = Paginator(messages_list, 10)
     if request.method == "GET":
         page = request.GET.get('page')
         try:
@@ -342,7 +342,7 @@ def follows(request):
         return redirect("/login/login/")
     user = models.User.objects.get(sno=request.session['user_sno'])
     follow_list = user.follow.order_by('-fans')
-    paginator = Paginator(follow_list, 3)
+    paginator = Paginator(follow_list, 10)
     if request.method == "GET":
         page = request.GET.get('page')
         try:
@@ -357,12 +357,13 @@ def follows(request):
         follow_set = paginator.page(1)
     return render(request, 'login/follows.html', {'follow_set': follow_set, "length": len(follow_list)})
 
+
 def posts_ta(request, sno):
     if not request.session.get('is_login', None):
         return redirect("/login/login/")
     user = models.User.objects.get(sno=sno)
     posts_list = user.author.order_by('-create_time')
-    paginator = Paginator(posts_list, 3)
+    paginator = Paginator(posts_list, 10)
     if request.method == "GET":
         page = request.GET.get('page')
         try:
@@ -377,6 +378,7 @@ def posts_ta(request, sno):
         posts = paginator.page(1)
     return render(request, 'login/posts_ta.html', {'user': user, 'posts': posts, "length": len(posts_list)})
 
+
 def followers(request):
     if not request.session.get('is_login', None):
         return redirect("/login/login/")
@@ -387,8 +389,8 @@ def followers(request):
         follow_list = user.follow.order_by('-fans')
         if me in follow_list:
             follower_list.append(user)
-        
-    paginator = Paginator(follower_list, 3)
+
+    paginator = Paginator(follower_list, 10)
     if request.method == "GET":
         page = request.GET.get('page')
         try:
