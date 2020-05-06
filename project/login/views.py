@@ -327,10 +327,13 @@ def follow_cancel(request, sno):
     user = models.User.objects.get(sno=request.session['user_sno'])
     followed_user = models.User.objects.get(sno=sno)
     message1 = ""
-    followed_user.fans -= 1
-    followed_user.save()
-    user.follow.remove(followed_user)
-    user.save()
+    if followed_user in user.follow.all():
+        followed_user.fans -= 1
+        followed_user.save()
+        user.follow.remove(followed_user)
+        user.save()
+    else:
+        message1 = "您并没有关注TA"
     sign2 = False
     sign1 = True
     ctx = {'user': followed_user, 'message1': message1, 'sign1': sign1, 'sign2': sign2}

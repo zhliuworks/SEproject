@@ -60,6 +60,7 @@
 
   <h3>&nbsp&nbsp我的发布</h3>
 
+  {% if posts %}
   <div class="panel panel-default">
     <div class="panel-heading">
       <p class="panel-title" style="font-size: small;">总共有{{length}}个我发布的帖子，按发帖时间排序如下：</p>
@@ -79,7 +80,7 @@
         <tbody>
           {% for post in posts %}
           <tr>
-            <td>{{post.id}}</td>
+            <td>{{ forloop.counter }}</td>
             <td><a href="/bbs/{{ post.id }}">{{ post.title }}</a></td>
             <td>{{ post.author.name }}</td>
             <td>{{ post.category.name }}</td>
@@ -112,6 +113,9 @@
       </ul>
     </nav>
   </div>
+  {% else %}
+  &nbsp&nbsp&nbsp&nbsp还没有我发布的帖子
+  {% endif %}
 </body>
 
 </html>

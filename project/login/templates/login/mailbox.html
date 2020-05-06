@@ -59,6 +59,8 @@
   <!--基础导航栏-->
 
   <h3>&nbsp&nbsp我的信箱</h3>
+
+  {% if messages %}
   <div class="panel panel-default">
     <div class="panel-heading">
       <p class="panel-title" style="font-size: small;">总共有{{length}}个我收到的私信，按发信时间排序如下：</p>
@@ -107,6 +109,9 @@
       </ul>
     </nav>
   </div>
+  {% else %}
+  &nbsp&nbsp&nbsp&nbsp还没有收到来信
+  {% endif %}
 </body>
 
 </html>

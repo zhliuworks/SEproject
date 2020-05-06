@@ -71,12 +71,14 @@ def post_edit_page_action(request):
                 title = post_form.cleaned_data.get('title')
                 content = post_form.cleaned_data.get('content')
                 category = post_form.cleaned_data.get('category')
-                tag = post_form.cleaned_data.get('tag')
+                tags = post_form.cleaned_data.get('tag')
 
             author = User.objects.get(sno=request.session['user_sno'])
 
             post_new = models.Post.objects.create(title=title, content=content, author=author, category=category)
-            post_new.tags.add(tag)
+
+            for tag in tags:
+                post_new.tags.add(tag)
 
             posts = models.Post.objects.all()
             return index(request)
@@ -146,3 +148,11 @@ def delete_comment(request, comment_id):
     post_id = comment.post.id
     comment.delete()
     return HttpResponseRedirect(reverse('bbs:detail', args=(post_id,)))
+
+
+def delete_post(request, post_id):
+    if not request.session.get('is_login', None):
+        return redirect("/login/login/")
+    post = models.Post.objects.get(pk=post_id)
+    post.delete()
+    return redirect('/bbs/')

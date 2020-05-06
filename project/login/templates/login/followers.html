@@ -60,6 +60,7 @@
 
   <h3>&nbsp&nbsp关注我的</h3>
 
+  {% if follower_set %}
   <div class="panel panel-default">
     <div class="panel-heading">
       <p class="panel-title" style="font-size: small;">总共有{{length}}个关注我的人，按粉丝数排序如下：</p>
@@ -110,7 +111,9 @@
       </ul>
     </nav>
   </div>
-
+  {% else %}
+  &nbsp&nbsp&nbsp&nbsp还没有关注我的用户
+  {% endif %}
 </body>
 
 </html>

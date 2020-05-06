@@ -70,8 +70,16 @@
           </button>
         </a>
         {% endif %}
+        &nbsp
+        {% if sign %}
+        <a href="/bbs/delete_post/{{ post.id }}">
+          <button type="button" class="btn btn-default btn-xs">
+            删除
+          </button>
+        </a>
+        {% endif %}
       </div>
-      <!--编辑按钮-->
+      <!--编辑和删除按钮-->
 
       <div>
         作者：<a href="/info/{{ post.author.sno }}">{{ post.author.name }}</a>
@@ -109,104 +117,99 @@
       {% endif %}
       <!--点赞-->
 
-      <button type="button" class="btn btn-default" data-toggle="modal" data-target="#myModal">
-        <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
-        评论
-      </button>
+      <form method="post">
+        {% csrf_token %}
+        <button type="submit" formaction="/bbs/comment/{{ post.id }}/0">
+          <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
+          评论
+        </button>
+      </form>
       <!--评论按钮-->
 
-      <!--模态框-->
-      <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
-                &times;
-              </button>
-              <h4 class="modal-title" id="myModalLabel">
-                评论
-              </h4>
-              <div class="text-center">
-                </br>
-                <textarea class="form-control" rows="5" placeholder="写评论..."></textarea>
-                </br>
-                <button type="submit" class="btn btn-default">发送</button>
-              </div>
-            </div>
-          </div><!-- /.modal-content -->
-        </div><!-- /.modal -->
-      </div>
-    </div>
-  </div>
-  <!--帖子部分-->
+      <!--帖子部分-->
 
-  <div class="panel panel-default">
-    <div class="panel-heading">
-      <div class="panel-title">
-        <b>评论</b>
-      </div>
-    </div>
-    <div class="panel-body">
-      <div class="list-group-item">
-        {% for comment in comments %}
-        {% if not comment.root %}
-        <div class="list-group-item-heading">
-          <a href="/info/{{ comment.name.sno }}">{{ comment.name.name }}</a>
-          <span style="color: gray;font-size: small;">{{ comment.created }}</span>
-          {% ifequal user.sno comment.name.sno %}
-          <form action="/bbs/delete/{{ comment.id }}" method="post" style="display: inline;">
-            {% csrf_token %}
-            <button type="submit" class="btn btn-default btn-xs">
-              <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
-            </button>
-          </form>
-          <!--删除评论-->
-          {% endifequal %}
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <div class="panel-title">
+            <b>评论</b>
+          </div>
         </div>
-        <div class="list-group-item-text">
-          <a href="/bbs/comment/{{ post.id }}/{{ comment.id }}" style="color: black;">
-            {{ comment.content }}
-          </a>
-          <!--点击评论内容回复-->
-          <!--评论部分-->
-          </br></br>
+        <div class="panel-body">
           <div class="list-group-item">
-            {% for reply in comment.root_comment.all %}
+            {% if comments %}
+            {% for comment in comments %}
+            {% if not comment.root %}
             <div class="list-group-item-heading">
-              <span><a href="/info/{{ reply.name.sno }}">{{ reply.name.name }}</a></span>
-              <span style="color: gray;font-size: small;">({{ reply.created|date:"Y-m-d H:i:s" }})</span>
-              <span>回复</span>
-              <span><a href="/info/{{ reply.reply_to.sno }}">{{ reply.reply_to.name }}</a>：</span>
-              {% ifequal user.sno reply.name.sno %}
-              <form action="/bbs/delete/{{ reply.id }}" method="post" style="display: inline;">
+              <a href="/info/{{ comment.name.sno }}">{{ comment.name.name }}</a>
+              <span style="color: gray;font-size: small;">{{ comment.created }}</span>
+              {% ifequal user.sno comment.name.sno %}
+              <form action="/bbs/delete/{{ comment.id }}" method="post" style="display: inline;">
                 {% csrf_token %}
                 <button type="submit" class="btn btn-default btn-xs">
                   <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+                  删除
                 </button>
               </form>
+              <!--删除评论-->
               {% endifequal %}
             </div>
             <div class="list-group-item-text">
-              <div id="comment_{{ reply.pk }}">
-                <a href="/bbs/comment/{{ post.id }}/{{ reply.id }}" style="color: black;">
-                  {{ reply.content|safe }}
-                </a>
-                </br>
+
+              <form action="/bbs/comment/{{ post.id }}/{{ comment.id }}" method="post" style="display: inline;">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-default btn-xs">
+                  评论
+                </button>
+              </form>
+
+              {{ comment.content }}
+
+              <!--评论部分-->
+              </br></br>
+              <div class="list-group-item">
+                {% for reply in comment.root_comment.all %}
+                <div class="list-group-item-heading">
+                  <span><a href="/info/{{ reply.name.sno }}">{{ reply.name.name }}</a></span>
+                  <span style="color: gray;font-size: small;">({{ reply.created|date:"Y-m-d H:i:s" }})</span>
+                  <span>回复</span>
+                  <span><a href="/info/{{ reply.reply_to.sno }}">{{ reply.reply_to.name }}</a>：</span>
+                  {% ifequal user.sno reply.name.sno %}
+                  <form action="/bbs/delete/{{ reply.id }}" method="post" style="display: inline;">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-default btn-xs">
+                      <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+                    </button>
+                  </form>
+                  {% endifequal %}
+                </div>
+                <div class="list-group-item-text">
+                  <div id="comment_{{ reply.pk }}">
+                    <form action="/bbs/comment/{{ post.id }}/{{ reply.id }}" method="post" style="display: inline;">
+                      {% csrf_token %}
+                      <button type="submit" class="btn btn-default btn-xs">
+                        回复
+                      </button>
+                    </form>
+                    {{ reply.content|safe }}
+                    </br>
+                  </div>
+                </div>
+                {% endfor %}
               </div>
+              <!--评论回复部分-->
+              </br>
+              {% endif %}
+              {% endfor %}
+              {% else %}
+              还没有评论
+              {% endif %}
             </div>
-            {% endfor %}
           </div>
-          <!--评论回复部分-->
-          </br>
-          {% endif %}
-          {% endfor %}
         </div>
       </div>
-    </div>
-  </div>
 
 
-  <!-- 原后端代码（待合并）
+      <!-- 原后端代码（待合并）
 <!DOCTYPE html>
 <html lang="en">
 
@@ -282,6 +285,30 @@
 </body>
 
 </html>
+
+模态框
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+          &times;
+        </button>
+        <h4 class="modal-title" id="myModalLabel">
+          评论
+        </h4>
+        <div class="text-center">
+          </br>
+          <textarea class="form-control" rows="5" placeholder="写评论..."></textarea>
+          </br>
+          <button type="submit" class="btn btn-default">发送</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+</div>
 -->
 
 </body>
