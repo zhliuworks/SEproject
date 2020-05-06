@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>搜索</title>
+</head>
+
+<body>
+  {% if query %}
+  <h3>搜索“{{ query }}”结果如下：</h3>
+  {% for result in page.object_list %}
+
+  {% if result.object.cno %}
+  课程：&nbsp
+  <a href="/course/course/{{ result.object.cno }}/">{{ result.object.cno }}</a>
+  &nbsp{{ result.object.name }}<br>
+  {% elif result.object.tno %}
+  教师：&nbsp
+  <a href="/course/teacher/{{ result.object.tno }}/">{{ result.object.tno }}</a>
+  &nbsp{{ result.object.name }}<br>
+  {% elif result.object.file %}
+  文件：&nbsp
+  {{ result.object.title }}&nbsp(资料序号：{{ result.object.id }})
+  <a href="/course/download/{{ result.object.id }}">点击下载</a><br>
+  {% elif result.object.author %}
+  帖子：&nbsp
+  <a href="/bbs/{{ result.object.id }}">{{ result.object.title }}</a><br>
+  {% endif %}
+
+  {% empty %}
+  <p>抱歉，没有找到任何匹配的结果~</p>
+  {% endfor %}
+  {% endif %}
+
+  <form action="/login/index/" method="post">
+    {% csrf_token %}
+    <button type="submit" formaction="/login/index/">返回主页</button>
+  </form>
+
+</body>
+
+</html>

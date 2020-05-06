@@ -68,7 +68,7 @@ class Teacher(models.Model):
 
 class File(models.Model):
     title = models.CharField(max_length=128)
-    course = models.ForeignKey(Course, on_delete=models.CASCADE,)
+    course = models.ForeignKey(Course, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     introduction = models.CharField(max_length=256, null=True)
     likes = models.IntegerField(default=0)

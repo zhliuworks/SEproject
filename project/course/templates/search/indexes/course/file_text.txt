@@ -1,0 +1,3 @@
+{{ object.title }}
+{{ object.course.name }}
+{{ object.introduction }}
