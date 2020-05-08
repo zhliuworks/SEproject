@@ -87,7 +87,7 @@ def post_edit_page_action(request):
     post.title = title
     post.content = content
     post.save()
-    return render(request, 'bbs/edit_page.html', {'post': post})
+    return HttpResponseRedirect(reverse('bbs:detail', args=(post_id,)))
 
 
 def like_post(request, post_id):

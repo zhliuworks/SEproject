@@ -13,7 +13,7 @@ class PostForm(forms.Form):
 
 
 class CommentForm(forms.Form):
-    content = forms.CharField(widget=forms.widgets.TextInput())
+    content = forms.CharField(widget=forms.Textarea())
     reply_comment_id = forms.IntegerField(widget=forms.widgets.HiddenInput())
 
     def clean_reply_comment_id(self):
