@@ -60,9 +60,10 @@
 
   <h3>&nbsp&nbsp我的点赞</h3>
 
-  {% if posts %}
+
   <div class="panel panel-default">
     <div class="panel-heading">
+      {% if posts %}
       <p class="panel-title" style="font-size: small;">总共有{{length}}个我点赞的帖子，按发帖时间排序如下：</p>
     </div>
     <div class="panel-body">
@@ -90,32 +91,32 @@
           {% endfor %}
         </tbody>
       </table>
+      {# 实现分页标签的代码 #}
+      {# 这里使用 bootstrap 渲染页面 #}
+      <div id="pages" class="text-center">
+        <nav>
+          <ul class="pagination">
+            <li class="step-links">
+              {% if posts.has_previous %}
+              <a class='active' href="?page={{ posts.previous_page_number }}">上一页</a>
+              {% endif %}
+
+              <span class="current">
+                Page {{ posts.number }} of {{ posts.paginator.num_pages }}</span>
+
+              {% if posts.has_next %}
+              <a class='active' href="?page={{ posts.next_page_number }}">下一页</a>
+              {% endif %}
+            </li>
+          </ul>
+        </nav>
+      </div>
+      {% else %}
+      还没有我点赞的帖子
+      {% endif %}
     </div>
   </div>
 
-  {# 实现分页标签的代码 #}
-  {# 这里使用 bootstrap 渲染页面 #}
-  <div id="pages" class="text-center">
-    <nav>
-      <ul class="pagination">
-        <li class="step-links">
-          {% if posts.has_previous %}
-          <a class='active' href="?page={{ posts.previous_page_number }}">上一页</a>
-          {% endif %}
-
-          <span class="current">
-            Page {{ posts.number }} of {{ posts.paginator.num_pages }}</span>
-
-          {% if posts.has_next %}
-          <a class='active' href="?page={{ posts.next_page_number }}">下一页</a>
-          {% endif %}
-        </li>
-      </ul>
-    </nav>
-  </div>
-  {% else %}
-  &nbsp&nbsp&nbsp&nbsp还没有我点赞的帖子
-  {% endif %}
 </body>
 
 </html>

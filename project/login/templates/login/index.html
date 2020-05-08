@@ -100,6 +100,10 @@
   </div>
   <!--主界面-->
 
+  <div class="text-center">
+      <h3>{{ request.session.user_name }}，欢迎您！</h3>
+  </div>
+
   <form class="navbar-form navbar-left" method='get' action="/search/">
     <div class="form-group">
       <input type="text" class="form-control" placeholder="搜索课程/教师/资料/帖子" name='q'>
@@ -110,6 +114,7 @@
     </button>
   </form>
   <br><br><br><br>
+
 
   <ol class="breadcrumb">
     <p>本项目源码受 <a rel="license" href="https://github.com/twbs/bootstrap/blob/master/LICENSE" target="_blank">MIT</a>开源协议保护，文档受 <a rel="license" href="https://creativecommons.org/licenses/by/3.0/" target="_blank">CC BY 3.0</a> 开源协议保护。</p>

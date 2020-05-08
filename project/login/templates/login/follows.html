@@ -60,9 +60,10 @@
 
   <h3>&nbsp&nbsp我的关注</h3>
 
-  {% if follow_set %}
+
   <div class="panel panel-default">
     <div class="panel-heading">
+      {% if follow_set %}
       <p class="panel-title" style="font-size: small;">总共有{{length}}个我关注的人，按粉丝数排序如下：</p>
     </div>
     <div class="panel-body">
@@ -88,33 +89,32 @@
           {% endfor %}
         </tbody>
       </table>
+      {# 实现分页标签的代码 #}
+      {# 这里使用 bootstrap 渲染页面 #}
+      <div id="pages" class="text-center">
+        <nav>
+          <ul class="pagination">
+            <li class="step-links">
+              {% if follow_set.has_previous %}
+              <a class='active' href="?page={{ follow_set.previous_page_number }}">上一页</a>
+              {% endif %}
+
+              <span class="current">
+                Page {{ follow_set.number }} of {{ follow_set.paginator.num_pages }}</span>
+
+              {% if follow_set.has_next %}
+              <a class='active' href="?page={{ follow_set.next_page_number }}">下一页</a>
+              {% endif %}
+            </li>
+          </ul>
+        </nav>
+      </div>
+      {% else %}
+      还没有我关注的用户
+      {% endif %}
     </div>
   </div>
 
-
-  {# 实现分页标签的代码 #}
-  {# 这里使用 bootstrap 渲染页面 #}
-  <div id="pages" class="text-center">
-    <nav>
-      <ul class="pagination">
-        <li class="step-links">
-          {% if follow_set.has_previous %}
-          <a class='active' href="?page={{ follow_set.previous_page_number }}">上一页</a>
-          {% endif %}
-
-          <span class="current">
-            Page {{ follow_set.number }} of {{ follow_set.paginator.num_pages }}</span>
-
-          {% if follow_set.has_next %}
-          <a class='active' href="?page={{ follow_set.next_page_number }}">下一页</a>
-          {% endif %}
-        </li>
-      </ul>
-    </nav>
-  </div>
-  {% else %}
-  &nbsp&nbsp&nbsp&nbsp还没有我关注的用户
-  {% endif %}
 </body>
 
 </html>

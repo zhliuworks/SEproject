@@ -60,58 +60,47 @@
 
   <h3>&nbsp&nbsp我的信箱</h3>
 
-  {% if messages %}
   <div class="panel panel-default">
     <div class="panel-heading">
+      {% if messages %}
       <p class="panel-title" style="font-size: small;">总共有{{length}}个我收到的私信，按发信时间排序如下：</p>
     </div>
     <div class="panel-body">
-      <table class="table">
-        <thead>
-          <tr>
-            <th>发送者</th>
-            <th>题目</th>
-            <th>内容</th>
-            <th>创建时间</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for message in messages %}
-          <tr>
-            <td><a href="/info/{{ message.sender.sno }}">{{ message.sender.name }}</a></td>
-            <td>{{ message.title }}</td>
-            <td>{{ message.content }}</td>
-            <td>{{ message.created }}</td>
-          </tr>
-          {% endfor %}
-        </tbody>
-      </table>
+      {% for message in messages %}
+      <div>
+        <button type="button" class="list-group-item">
+          <b>发信人：</b><a href="/info/{{ message.sender.sno }}">{{ message.sender.name }}</a>&nbsp&nbsp&nbsp&nbsp<b>主题：</b>{{ message.title }}
+          <p>{{ message.content }}</p>
+          <div style="color:gray">{{ message.created }}</div>
+        </button>
+      </div>
+      {% endfor %}
     </div>
+    {# 实现分页标签的代码 #}
+    {# 这里使用 bootstrap 渲染页面 #}
+    <div id="pages" class="text-center">
+      <nav>
+        <ul class="pagination">
+          <li class="step-links">
+            {% if messages.has_previous %}
+            <a class='active' href="?page={{ messages.previous_page_number }}">上一页</a>
+            {% endif %}
+
+            <span class="current">
+              Page {{ messages.number }} of {{ messages.paginator.num_pages }}</span>
+
+            {% if messages.has_next %}
+            <a class='active' href="?page={{ messages.next_page_number }}">下一页</a>
+            {% endif %}
+          </li>
+        </ul>
+      </nav>
+    </div>
+    {% else %}
+    还没有收到来信
+    {% endif %}
   </div>
 
-  {# 实现分页标签的代码 #}
-  {# 这里使用 bootstrap 渲染页面 #}
-  <div id="pages" class="text-center">
-    <nav>
-      <ul class="pagination">
-        <li class="step-links">
-          {% if messages.has_previous %}
-          <a class='active' href="?page={{ messages.previous_page_number }}">上一页</a>
-          {% endif %}
-
-          <span class="current">
-            Page {{ messages.number }} of {{ messages.paginator.num_pages }}</span>
-
-          {% if messages.has_next %}
-          <a class='active' href="?page={{ messages.next_page_number }}">下一页</a>
-          {% endif %}
-        </li>
-      </ul>
-    </nav>
-  </div>
-  {% else %}
-  &nbsp&nbsp&nbsp&nbsp还没有收到来信
-  {% endif %}
 </body>
 
 </html>

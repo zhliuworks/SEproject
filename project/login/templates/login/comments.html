@@ -60,58 +60,54 @@
 
   <h3>&nbsp&nbsp我的评论</h3>
 
-  {% if comments %}
+
   <div class="panel panel-default">
     <div class="panel-heading">
+      {% if comments %}
       <p class="panel-title" style="font-size: small;">总共有{{length}}个我评论的帖子，按发帖时间排序如下：</p>
     </div>
     <div class="panel-body">
-      <table class="table">
-        <thead>
-          <tr>
-            <th>序号</th>
-            <th>帖子</th>
-            <th>创建时间</th>
-            <th>内容</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for comment in comments %}
-          <tr>
-            <td>{{ forloop.counter }}</td>
-            <td><a href="/bbs/{{ comment.post.id }}">{{ comment.post.title }}</a></td>
-            <td>{{ comment.created }}</td>
-            <td>{{ comment.content }}</td>
-          </tr>
-          {% endfor %}
-        </tbody>
-      </table>
+      {% for comment in comments %}
+      <div>
+        <button type="button" class="list-group-item">
+          <b>帖子名：</b><a href="/bbs/{{ comment.post.id }}">{{ comment.post.title }}</a>&nbsp&nbsp&nbsp&nbsp
+          {% if comment.reply_to %}
+          我回复了<a href="/info/{{ comment.reply_to.sno }}">{{ comment.reply_to.name }}</a>的评论
+          {% else %}
+          我评论了<a href="/info/{{ comment.post.author.sno }}">{{ comment.post.author.name }}</a>的帖子
+          {% endif %}
+          <br>
+          {{ comment.content }}
+          <div style="color:gray">{{ comment.created }}</div>
+        </button>
+      </div>
+      {% endfor %}
     </div>
+    {# 实现分页标签的代码 #}
+    {# 这里使用 bootstrap 渲染页面 #}
+    <div id="pages" class="text-center">
+      <nav>
+        <ul class="pagination">
+          <li class="step-links">
+            {% if comments.has_previous %}
+            <a class='active' href="?page={{ comments.previous_page_number }}">上一页</a>
+            {% endif %}
+
+            <span class="current">
+              Page {{ comments.number }} of {{ comments.paginator.num_pages }}</span>
+
+            {% if comments.has_next %}
+            <a class='active' href="?page={{ comments.next_page_number }}">下一页</a>
+            {% endif %}
+          </li>
+        </ul>
+      </nav>
+    </div>
+    {% else %}
+    还没有我评论的帖子
+    {% endif %}
   </div>
 
-  {# 实现分页标签的代码 #}
-  {# 这里使用 bootstrap 渲染页面 #}
-  <div id="pages" class="text-center">
-    <nav>
-      <ul class="pagination">
-        <li class="step-links">
-          {% if comments.has_previous %}
-          <a class='active' href="?page={{ comments.previous_page_number }}">上一页</a>
-          {% endif %}
-
-          <span class="current">
-            Page {{ comments.number }} of {{ comments.paginator.num_pages }}</span>
-
-          {% if comments.has_next %}
-          <a class='active' href="?page={{ comments.next_page_number }}">下一页</a>
-          {% endif %}
-        </li>
-      </ul>
-    </nav>
-  </div>
-  {% else %}
-  &nbsp&nbsp&nbsp&nbsp还没有我评论的帖子
-  {% endif %}
 </body>
 
 </html>
