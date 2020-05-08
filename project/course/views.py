@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.http import FileResponse
 from django.utils.encoding import escape_uri_path
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage, InvalidPage
 from .models import Course, Teacher, File
 from .forms import UploadForm
 from login.models import User
@@ -9,10 +10,26 @@ from login.models import User
 def index(request):
     if not request.session.get('is_login', None):
         return redirect("/login/login/")
+    user = User.objects.get(sno=request.session['user_sno'])
     course_list = Course.objects.order_by('cno')
     teacher_list = Teacher.objects.order_by("tno")
-    file_list = File.objects.order_by("-create_time")
-    ctx = {'course_list': course_list, 'teacher_list': teacher_list, 'file_list': file_list}
+    file_set = File.objects.order_by("-create_time")
+
+    pag_file = Paginator(file_set, 8)
+    if request.method == "GET":
+        page = request.GET.get('page')
+        try:
+            file_list = pag_file.page(page)
+        except PageNotAnInteger:
+            file_list = pag_file.page(1)
+        except InvalidPage:
+            return HttpResponse('找不到页面的内容')
+        except EmptyPage:
+            file_list = pag_file.page(pag_file.num_pages)
+    else:
+        file_list = pag_file.page(1)
+
+    ctx = {'user': user, 'course_list': course_list, 'teacher_list': teacher_list, 'file_list': file_list}
     return render(request, 'index.html', ctx)
 
 
@@ -73,3 +90,23 @@ def download_file(request, file_id):
     response['Content-Type']='application/octet-stream'
     response['Content-Disposition']='attachment;filename="{0}"'.format(escape_uri_path(str(file.file)))
     return response
+
+
+def like_file(request, file_id):
+    if not request.session.get('is_login', None):
+        return redirect("/login/login/")
+    file = File.objects.get(id=file_id)
+    user = User.objects.get(sno=request.session['user_sno'])
+    if user not in file.like_users.all():
+        file.likes += 1
+        file.like_users.add(user)
+        file.save()
+    return redirect("/course/")
+
+
+def delete_file(request, file_id):
+    if not request.session.get('is_login', None):
+        return redirect("/login/login/")
+    file = File.objects.get(id=file_id)
+    file.delete()
+    return redirect("/course/")

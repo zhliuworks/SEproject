@@ -10,4 +10,6 @@ urlpatterns = [
     path('upload/', views.upload_file),
     path('upload/action/', views.upload_file_action),
     path('download/<int:file_id>', views.download_file),
+    path('like_file/<int:file_id>', views.like_file),
+    path('delete_file/<int:file_id>', views.delete_file),
 ]

@@ -72,6 +72,7 @@ class File(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     introduction = models.CharField(max_length=256, null=True)
     likes = models.IntegerField(default=0)
+    like_users = models.ManyToManyField(User, verbose_name='用户', related_name='like_users_file')
     downloads = models.IntegerField(default=0)
     create_time = models.DateTimeField('上传时间', auto_now_add=True)
     file = models.FileField(upload_to=file_directory_path)
