@@ -10,6 +10,7 @@
 
   <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
   <meta charset="UTF-8">
   <style type="text/css">
     .ex-search {
@@ -50,7 +51,7 @@
       bottom: 0px;
     }
   </style>
-  <title>课程与老师信息页</title>
+  <title>课程主页</title>
 </head>
 
 <body>
@@ -97,9 +98,9 @@
   <!--基础导航栏-->
 
   <ul class="nav nav-tabs" role="tablist">
-    <li role="presentation" class="active"><a href="#course" role="tab" data-toggle="tab">课程列表</a></li>
+    <li role="presentation" class="active"><a href="#file" role="tab" data-toggle="tab">资料列表</a></li>
+    <li role="presentation"><a href="#course" role="tab" data-toggle="tab">课程列表</a></li>
     <li role="presentation"><a href="#teacher" role="tab" data-toggle="tab">教师列表</a></li>
-    <li role="presentation"><a href="#file" role="tab" data-toggle="tab">资料列表</a></li>
     <form class="navbar-form navbar-left" method='get' action="/search/">
       <div class="form-group">
         <input type="text" class="form-control" placeholder="搜索课程/教师/资料/帖子" name='q'>
@@ -109,93 +110,146 @@
         &nbsp&nbsp&nbsp&nbsp&nbsp搜索
       </button>
     </form>
-    <ul style="float: right;">
+    <div class="text-right">
       <a href="/course/upload/">
         <button type="button" class="btn btn-default">
           上传资料
         </button>
-        &nbsp&nbsp&nbsp&nbsp
       </a>
-    </ul>
+      &nbsp&nbsp&nbsp&nbsp
+    </div>
   </ul>
   <div class="tab-content">
 
-    <div class="tab-pane active" id="course" role="tabpanel">
+
+    <div class="tab-pane active" id="file" role="tabpanel">
+      {% if file_list %}
+      <ul class="list-group">
+        {% for file in file_list %}
+        <li class="list-group-item">
+          <span class="badge" style="background-color:#D02090">
+            <h5>下载量：{{ file.downloads }}</h5>
+          </span>
+          <span class="badge" style="background-color:#9400D3">
+            <h5>上传者：<a href="/info/{{ file.user.sno }}" style="color:#E0FFFF">{{ file.user.name }}</a></h5>
+          </span>
+          <span class="badge" style="background-color:#191970">
+            <h5>课程：<a href="/course/course/{{ file.course.cno }}/" style="color:#87CEEB">{{ file.course.name }}</a></h5>
+          </span>
+          <h4><b><span style="color:red">题目：</span>{{ file.title }}</b></h4>
+          <p><b>简介：{{ file.introduction }}</b></p>
+
+          <p style="color:#696969">文件名：{{ file.file }}</p>
+          <p style="color:#696969">上传时间：{{ file.create_time }}</p>
+
+          <div class="text-right">
+            {% if user not in file.like_users.all %}
+            <form action="/course/like_file/{{ file.id }}" method="post" style="display: inline;;">
+              {% csrf_token %}
+              <button type="submit" class="btn btn-default">
+                <span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span>
+                {{file.likes}}
+              </button>
+            </form>
+            {% else %}
+            <button type="submit" class="btn btn-default">
+              <span class="glyphicon glyphicon-thumbs-up" aria-hidden="true" style="color:red"></span>
+              {{file.likes}}
+            </button>
+            {% endif %}
+
+            <a href="/course/download/{{ file.id }}">
+              <button type="submit" formaction="/course/download/{{ file.id }}" class="btn btn-default">
+                <span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span>
+                点击下载
+              </button>
+            </a>
+
+            {% ifequal file.user user %}
+            <a href="/course/delete_file/{{ file.id }}">
+              <button type="submit" formaction="/course/delete_file/{{ file.id }}" class="btn btn-default">
+                <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+                删除
+              </button>
+            </a>
+            {% endifequal %}
+          </div>
+        </li>
+
+        {% endfor %}
+      </ul>
+      {% else %}
+      <p>No files are available.</p>
+      {% endif %}
+
+
+      <div id="pages" class="text-center">
+        <nav>
+          <ul class="pagination">
+            <li class="step-links">
+              {% if file_list.has_previous %}
+              <a class='active' href="?page={{ file_list.previous_page_number }}">上一页</a>
+              {% endif %}
+
+              <span class="current">
+                Page {{ file_list.number }} of {{ file_list.paginator.num_pages }}</span>
+
+              {% if file_list.has_next %}
+              <a class='active' href="?page={{ file_list.next_page_number }}">下一页</a>
+              {% endif %}
+            </li>
+          </ul>
+        </nav>
+      </div>
+
+    </div>
+
+
+    <div class="tab-pane" id="course" role="tabpanel">
       {% if course_list %}
-      {% for course in course_list %}
-      <button type="button" class="list-group-item">
-        <li>{{ course.cno }}&nbsp<a href="/course/course/{{ course.cno }}/">{{ course.name }}</a></li>
-      </button>
-      {% endfor %}
+      <ul class="list-group">
+        {% for course in course_list %}
+        <li class="list-group-item">
+          <h4>
+            <b>
+              <span class="badge" style="background-color:#4169E1">{{ course.cno }}</span>&nbsp&nbsp
+              <a href="/course/course/{{ course.cno }}/">{{ course.name }}</a>
+            </b>
+          </h4>
+        </li>
+        {% endfor %}
+      </ul>
       {% else %}
       <p>No courses are available.</p>
       {% endif %}
     </div>
 
+
     <div class="tab-pane" id="teacher" role="tabpanel">
       {% if teacher_list %}
-      {% for teacher in teacher_list %}
-      <button type="button" class="list-group-item">
-        <li>{{ teacher.tno }}&nbsp<a href="/course/teacher/{{ teacher.tno }}/">{{ teacher.name }}</a></li>
-      </button>
-      {% endfor %}
+      <ul class="list-group">
+        {% for teacher in teacher_list %}
+        <li class="list-group-item">
+          <h4>
+            <b>
+              <span class="badge" style="background-color:#2E8B57">{{ teacher.tno }}</span>&nbsp&nbsp
+              <a href="/course/teacher/{{ teacher.tno }}/">{{ teacher.name }}</a>
+            </b>
+          </h4>
+        </li>
+        {% endfor %}
+      </ul>
       {% else %}
       <p>No teachers are available.</p>
       {% endif %}
     </div>
 
-    <div class="tab-pane" id="file" role="tabpanel">
-      {% if file_list %}
-      {% for file in file_list %}
-      <button type="button" class="list-group-item">
-        <li>
-          序号：{{ file.id }}&nbsp&nbsp
-          题目：{{ file.title }}&nbsp&nbsp
-          课号：<a href="/course/course/{{ file.course.cno }}/">{{ file.course.cno }}</a>&nbsp&nbsp
-          上传者：<a href="/info/{{ file.user.sno }}">{{ file.user.name }}</a><br>
-          点赞数：{{ file.likes }}&nbsp&nbsp
-          下载数：{{ file.downloads }}&nbsp&nbsp
-          上传时间：{{ file.create_time }}<br>
-          简介：{{ file.introduction }}<br>
-          文件名：{{file.file}}
-          <a href="/course/download/{{ file.id }}">点击下载</a>
-        </li>
-      </button>
-      {% endfor %}
-      {% else %}
-      <p>No files are available.</p>
-      {% endif %}
-    </div>
 
   </div>
   </div>
-  -->
   <!--标签页-->
   <!--列表组-->
 
-  <!--
-  <div class="text-center">
-    <nav aria-label="Page navigation">
-      <ul class="pagination">
-        <li>
-          <a href="#" aria-label="Previous">
-            <span aria-hidden="true">&laquo;</span>
-          </a>
-        </li>
-        <li class="current"><a href="#">1</a></li>
-        <li><a href="#">2</a></li>
-        <li><a href="#">3</a></li>
-        <li><a href="#">4</a></li>
-        <li><a href="#">5</a></li>
-        <li>
-          <a href="#" aria-label="Next">
-            <span aria-hidden="true">&raquo;</span>
-          </a>
-        </li>
-      </ul>
-    </nav>
-  </div>
-分页-->
 
 </body>
 
