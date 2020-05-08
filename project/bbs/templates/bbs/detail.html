@@ -74,12 +74,21 @@
         {% if sign %}
         <a href="/bbs/delete_post/{{ post.id }}">
           <button type="button" class="btn btn-default btn-xs">
+            <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
             删除
           </button>
         </a>
         {% endif %}
+
+        <a href="/bbs/comment/{{ post.id }}/0">
+          <button type="submit" formaction="/bbs/comment/{{ post.id }}/0" class="btn btn-default btn-xs">
+            <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
+            评论
+          </button>
+        </a>
       </div>
-      <!--编辑和删除按钮-->
+
+      <!--编辑、评论、删除按钮-->
 
       <div>
         作者：<a href="/info/{{ post.author.sno }}">{{ post.author.name }}</a>
@@ -101,6 +110,7 @@
       <!--内容-->
 
       <div style="color: gray;">{{ post.create_time }}</div>
+
       {% if not sign_like %}
       <form action="/bbs/like/{{ post.id }}" method="post" style="display: inline;;">
         {% csrf_token %}
@@ -117,14 +127,6 @@
       {% endif %}
       <!--点赞-->
 
-      <form method="post">
-        {% csrf_token %}
-        <button type="submit" formaction="/bbs/comment/{{ post.id }}/0">
-          <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
-          评论
-        </button>
-      </form>
-      <!--评论按钮-->
 
       <!--帖子部分-->
 
@@ -158,6 +160,7 @@
               <form action="/bbs/comment/{{ post.id }}/{{ comment.id }}" method="post" style="display: inline;">
                 {% csrf_token %}
                 <button type="submit" class="btn btn-default btn-xs">
+                  <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
                   评论
                 </button>
               </form>
@@ -187,6 +190,7 @@
                     <form action="/bbs/comment/{{ post.id }}/{{ reply.id }}" method="post" style="display: inline;">
                       {% csrf_token %}
                       <button type="submit" class="btn btn-default btn-xs">
+                        <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
                         回复
                       </button>
                     </form>
