@@ -2,11 +2,256 @@
 <html lang="en">
 
 <head>
+  <!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css"
+    integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+  <!-- 可选的 Bootstrap 主题文件（一般不用引入） -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap-theme.min.css"
+    integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+  <script src="https://code.jquery.com/jquery.js"></script>
+
+  <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js"
+    integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+    crossorigin="anonymous"></script>
+  <style type="text/css">
+    .ex-search {
+      position: relative;
+    }
+
+    .ex-search:before {
+      content: ' ';
+      position: absolute;
+      width: 12px;
+      height: 12px;
+      border: 1px solid #666;
+      border-radius: 30px;
+      box-shadow: inset 1px 1px 10px rgba(0, 0, 0, .3);
+    }
+
+    .ex-search::after {
+      content: ' ';
+      position: absolute;
+      width: 7px;
+      height: 2px;
+      background: #666;
+      border-radius: 5px 0 0 5px;
+      -webkit-transform: rotate(225deg);
+      -moz-transform: rotate(225deg);
+      -ms-transform: rotate(225deg);
+      -o-transform: rotate(225deg);
+      transform: rotate(225deg);
+    }
+
+    .ex-search:before {
+      top: 0;
+      left: 0;
+    }
+
+    .ex-search:after {
+      right: -15px;
+      bottom: 0px;
+    }
+  </style>
   <meta charset="utf-8">
   <title>搜索</title>
 </head>
 
 <body>
+  <nav class="navbar navbar-default">
+    <div class="container-fluid">
+      <!-- Brand and toggle get grouped for better mobile display -->
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+          data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="#">交大知乎</a>
+      </div>
+
+      <!-- Collect the nav links, forms, and other content for toggling -->
+      <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+        <ul class="nav navbar-nav">
+          <li class=""><a href="/login/index/">主页<span class="sr-only">(current)</span></a></li>
+          <li><a href="/course/">课程</a></li>
+          <li><a href="/bbs/">社区</a></li>
+
+        </ul>
+
+        <ul class="nav navbar-nav navbar-right">
+          <li><a href="/about/">{{ request.session.user_name }}</a></li>
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+              aria-expanded="false">我的<span class="caret"></span></a>
+            <ul class="dropdown-menu">
+              <li><a href="/likes/">我的点赞</a></li>
+              <li><a href="/posts/">我的发布</a></li>
+              <li><a href="/comments/">我的评论</a></li>
+              <li><a href="/mailbox/">我的信箱</a></li>
+              <li><a href="/follows/">我的关注</a></li>
+              <li><a href="/followers/">关注我的</a></li>
+            </ul>
+          </li>
+          <li><a href="/login/logout/">登出</a></li>
+        </ul>
+      </div><!-- /.navbar-collapse -->
+    </div><!-- /.container-fluid -->
+  </nav>
+  <!--基础导航栏-->
+  {% if query %}
+  <h3>&nbsp&nbsp搜索“{{ query }}”结果如下：</h3>
+  <ul class="nav nav-tabs" role="tablist">
+    <li role="presentation" class="active"><a href="#bbs" role="tab" data-toggle="tab">帖子</a></li>
+    <li role="presentation"><a href="#file" role="tab" data-toggle="tab">资料</a></li>
+    <li role="presentation"><a href="#course" role="tab" data-toggle="tab">课程</a></li>
+    <li role="presentation"><a href="#teacher" role="tab" data-toggle="tab">教师</a></li>
+    <form class="navbar-form navbar-left" method='get' action="/search/">
+      <div class="form-group">
+        <input type="text" class="form-control" placeholder="搜索课程/教师/资料/帖子" name='q'>
+      </div>
+      <button type="submit" class="btn btn-default">
+        <span class="ex-search"></span>
+        &nbsp&nbsp&nbsp&nbsp&nbsp搜索
+      </button>
+    </form>
+  </ul>
+  <div class="tab-content">
+    <div class="tab-pane active" id="bbs" role="tabpanel">
+
+      {% for result in page.object_list %}
+      {% if result.object.author %}
+      <ul class="list-group">
+        <li class="list-group-item">
+          <a href="/bbs/{{ result.object.id }}"><b>{{ result.object.title }}</b></a>
+          &nbsp&nbsp&nbsp作者：<a href="/info/{{ result.object.author.sno }}">{{ result.object.author.name }}</a>
+            &nbsp&nbsp&nbsp
+            类别：{{ result.object.category }}
+            &nbsp&nbsp&nbsp
+            <span style="color: gray;">{{ result.object.create_time }}</span>
+      </li>
+      {% endif %}
+      {% endfor %}
+    </ul>
+    </div>
+    <!--帖子-->
+
+
+    <div class="tab-pane" id="file" role="tabpanel">
+      {% for result in page.object_list %}
+      {% if result.object.file %}
+      <ul class="list-group">
+        <li class="list-group-item">
+          <span class="badge" style="background-color:#D02090">
+            <h5>下载量：{{ result.object.downloads }}</h5>
+          </span>
+          <span class="badge" style="background-color:#9400D3">
+            <h5>上传者：<a href="/info/{{ result.object.user.sno }}" style="color:#E0FFFF">{{ result.object.user.name }}</a>
+            </h5>
+          </span>
+          <span class="badge" style="background-color:#191970">
+            <h5>课程：<a href="/course/course/{{ result.object.course.cno }}/"
+                style="color:#87CEEB">{{ result.object.course.name }}</a></h5>
+          </span>
+          <h4><b><span style="color:red">题目：</span>{{ result.object.title }}</b></h4>
+          <p><b>简介：{{ result.object.introduction }}</b></p>
+
+          <p style="color:#696969">文件名：{{ result.object.file }}</p>
+          <p style="color:#696969">上传时间：{{ result.object.create_time }}</p>
+
+          <div class="text-right">
+            {% if user not in result.object.like_users.all %}
+            <form action="/course/like_file/{{ result.object.id }}" method="post" style="display: inline;;">
+              {% csrf_token %}
+              <button type="submit" class="btn btn-default">
+                <span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span>
+                {{result.object.likes}}
+              </button>
+            </form>
+            {% else %}
+            <button type="submit" class="btn btn-default">
+              <span class="glyphicon glyphicon-thumbs-up" aria-hidden="true" style="color:red"></span>
+              {{result.object.likes}}
+            </button>
+            {% endif %}
+
+            <a href="/course/download/{{ result.object.id }}">
+              <button type="submit" formaction="/course/download/{{ result.object.id }}" class="btn btn-default">
+                <span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span>
+                点击下载
+              </button>
+            </a>
+
+            {% ifequal result.object.user user %}
+            <a href="/course/delete_file/{{ result.object.id }}">
+              <button type="submit" formaction="/course/delete_file/{{ result.object.id }}" class="btn btn-default">
+                <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+                删除
+              </button>
+            </a>
+            {% endifequal %}
+          </div>
+        </li>
+
+        {% endif %}
+        {% endfor %}
+
+      </ul>
+    </div>
+
+    <!--资料-->
+
+    <div class="tab-pane" id="course" role="tabpanel">
+
+      {% for result in page.object_list %}
+      {% if result.object.cno %}
+      <ul class="list-group">
+        <li class="list-group-item">
+          <h4>
+            <b>
+              <span class="badge" style="background-color:#4169E1">{{ result.object.cno }}</span>&nbsp&nbsp
+              <a href="/course/course/{{ result.object.cno }}/">{{ result.object.name }}</a>
+            </b>
+          </h4>
+        </li>
+        {% endif %}
+        {% endfor %}
+      </ul>
+    </div>
+    <!--课程-->
+
+
+    <div class="tab-pane" id="teacher" role="tabpanel">
+
+      {% for result in page.object_list %}
+      {% if result.object.tno %}
+      <ul class="list-group">
+        <li class="list-group-item">
+          <h4>
+            <b>
+              <span class="badge" style="background-color:#2E8B57">{{ result.object.tno }}</span>&nbsp&nbsp
+              <a href="/course/teacher/{{ result.object.tno }}/">{{ result.object.name }}</a>
+            </b>
+          </h4>
+        </li>
+        {% endif %}
+        {% endfor %}
+
+      </ul>
+    </div>
+    <!--教师-->
+
+
+  </div>
+
+  {% endif %}
+
+  <!--文件-->
+
+  <!----
   {% if query %}
   <h3>搜索“{{ query }}”结果如下：</h3>
   {% for result in page.object_list %}
@@ -33,11 +278,13 @@
   {% endfor %}
   {% endif %}
 
+
+
   <form action="/login/index/" method="post">
     {% csrf_token %}
     <button type="submit" formaction="/login/index/">返回主页</button>
   </form>
-
+  -->
 </body>
 
 </html>
