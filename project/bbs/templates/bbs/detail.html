@@ -60,47 +60,40 @@
   <div class="panel panel-default">
     <div class="panel-heading">
       <div class="panel-title">
-        <b>{{ post.title }}</b>
-        &nbsp
-        {% if sign %}
-        <a href="/bbs/edit/{{ post.id }}">
-          <button type="button" class="btn btn-default btn-xs">
-            <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
-            编辑
-          </button>
-        </a>
-        {% endif %}
-        &nbsp
-        {% if sign %}
-        <a href="/bbs/delete_post/{{ post.id }}">
-          <button type="button" class="btn btn-default btn-xs">
-            <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
-            删除
-          </button>
-        </a>
-        {% endif %}
-
-        <a href="/bbs/comment/{{ post.id }}/0">
-          <button type="submit" formaction="/bbs/comment/{{ post.id }}/0" class="btn btn-default btn-xs">
-            <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
-            评论
-          </button>
-        </a>
+        <h3><b>{{ post.title }}</b></h3>
       </div>
-
-      <!--编辑、评论、删除按钮-->
 
       <div>
-        作者：<a href="/info/{{ post.author.sno }}">{{ post.author.name }}</a>
-        &nbsp&nbsp&nbsp
-        类别：{{ post.category }}
-        &nbsp&nbsp&nbsp
-        标签:
-        {% for tag in tags %}
-        #{{ tag }}&nbsp
-        {% endfor %}
+        <h4>
+          <b>作者：</b><a href="/info/{{ post.author.sno }}">{{ post.author.name }}</a>
+          &nbsp&nbsp&nbsp
+          <b>类别：</b>{{ post.category }}
+          &nbsp&nbsp&nbsp
+          <b>标签:</b>
+          {% for tag in tags %}
+          <span class="badge" style="background-color:#0000CD">{{ tag }}</span>
+          {% endfor %}
+        </h4>
       </div>
       <!--信息-->
+
+      {% if sign %}
+      <a href="/bbs/edit/{{ post.id }}">
+        <button type="button" class="btn btn-default btn-xs">
+          <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
+          编辑
+        </button>
+      </a>
+      {% endif %}
+      &nbsp
+      {% if sign %}
+      <a href="/bbs/delete_post/{{ post.id }}">
+        <button type="button" class="btn btn-default btn-xs">
+          <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+          删除
+        </button>
+      </a>
+      {% endif %}
 
     </div>
     <div class="panel-body">
@@ -110,7 +103,6 @@
       <!--内容-->
 
       <div style="color: gray;">{{ post.create_time }}</div>
-
       {% if not sign_like %}
       <form action="/bbs/like/{{ post.id }}" method="post" style="display: inline;;">
         {% csrf_token %}
@@ -127,193 +119,93 @@
       {% endif %}
       <!--点赞-->
 
+      <form method="post" style="display: inline;">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-default" formaction="/bbs/comment/{{ post.id }}/0">
+          <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
+          评论
+        </button>
+      </form>
+      <!--评论按钮-->
+    </div>
+    <!--帖子部分-->
 
-      <!--帖子部分-->
-
-      <div class="panel panel-default">
-        <div class="panel-heading">
-          <div class="panel-title">
-            <b>评论</b>
-          </div>
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <div class="panel-title">
+          <b>评论</b>
         </div>
-        <div class="panel-body">
+      </div>
+      <div class="panel-body">
+        <div class="list-group-item">
+          {% if comments %}
+          {% for comment in comments %}
+          {% if not comment.root %}
+          <div class="list-group-item-heading">
+            <a href="/info/{{ comment.name.sno }}">{{ comment.name.name }}</a>
+            <span style="color: gray;font-size: small;">{{ comment.created }}</span>
+            {% ifequal user.sno comment.name.sno %}
+            <form action="/bbs/delete/{{ comment.id }}" method="post" style="display: inline;">
+              {% csrf_token %}
+              <button type="submit" class="btn btn-default btn-xs">
+                <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+                删除
+              </button>
+            </form>
+            <!--删除评论-->
+            {% endifequal %}
+            <form action="/bbs/comment/{{ post.id }}/{{ comment.id }}" method="post" style="display: inline;">
+              {% csrf_token %}
+              <button type="submit" class="btn btn-default btn-xs">
+                回复
+              </button>
+            </form>
+          </div>
+          <div class="list-group-item-text">
+            {{ comment.content }}
+          </div>
+          <!--评论部分-->
           <div class="list-group-item">
-            {% if comments %}
-            {% for comment in comments %}
-            {% if not comment.root %}
+            {% for reply in comment.root_comment.all %}
             <div class="list-group-item-heading">
-              <a href="/info/{{ comment.name.sno }}">{{ comment.name.name }}</a>
-              <span style="color: gray;font-size: small;">{{ comment.created }}</span>
-              {% ifequal user.sno comment.name.sno %}
-              <form action="/bbs/delete/{{ comment.id }}" method="post" style="display: inline;">
+              <span><a href="/info/{{ reply.name.sno }}">{{ reply.name.name }}</a></span>
+              <span style="color: gray;font-size: small;">({{ reply.created|date:"Y-m-d H:i:s" }})</span>
+              <span>回复</span>
+              <span><a href="/info/{{ reply.reply_to.sno }}">{{ reply.reply_to.name }}</a>：</span>
+              {% ifequal user.sno reply.name.sno %}
+              <form action="/bbs/delete/{{ reply.id }}" method="post" style="display: inline;">
                 {% csrf_token %}
                 <button type="submit" class="btn btn-default btn-xs">
                   <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
                   删除
                 </button>
               </form>
-              <!--删除评论-->
               {% endifequal %}
-            </div>
-            <div class="list-group-item-text">
-
-              <form action="/bbs/comment/{{ post.id }}/{{ comment.id }}" method="post" style="display: inline;">
+              <form action="/bbs/comment/{{ post.id }}/{{ reply.id }}" method="post" style="display: inline;">
                 {% csrf_token %}
                 <button type="submit" class="btn btn-default btn-xs">
-                  <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
-                  评论
+                  回复
                 </button>
               </form>
-
-              {{ comment.content }}
-
-              <!--评论部分-->
-              </br></br>
-              <div class="list-group-item">
-                {% for reply in comment.root_comment.all %}
-                <div class="list-group-item-heading">
-                  <span><a href="/info/{{ reply.name.sno }}">{{ reply.name.name }}</a></span>
-                  <span style="color: gray;font-size: small;">({{ reply.created|date:"Y-m-d H:i:s" }})</span>
-                  <span>回复</span>
-                  <span><a href="/info/{{ reply.reply_to.sno }}">{{ reply.reply_to.name }}</a>：</span>
-                  {% ifequal user.sno reply.name.sno %}
-                  <form action="/bbs/delete/{{ reply.id }}" method="post" style="display: inline;">
-                    {% csrf_token %}
-                    <button type="submit" class="btn btn-default btn-xs">
-                      <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
-                    </button>
-                  </form>
-                  {% endifequal %}
-                </div>
-                <div class="list-group-item-text">
-                  <div id="comment_{{ reply.pk }}">
-                    <form action="/bbs/comment/{{ post.id }}/{{ reply.id }}" method="post" style="display: inline;">
-                      {% csrf_token %}
-                      <button type="submit" class="btn btn-default btn-xs">
-                        <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
-                        回复
-                      </button>
-                    </form>
-                    {{ reply.content|safe }}
-                    </br>
-                  </div>
-                </div>
-                {% endfor %}
-              </div>
-              <!--评论回复部分-->
-              </br>
-              {% endif %}
-              {% endfor %}
-              {% else %}
-              还没有评论
-              {% endif %}
             </div>
+            <div class="list-group-item-text">
+              <div id="comment_{{ reply.pk }}">
+                {{ reply.content|safe }}
+              </div>
+            </div>
+            {% endfor %}
           </div>
-        </div>
-      </div>
-
-
-      <!-- 原后端代码（待合并）
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-  <meta charset="UTF-8">
-  <title>帖子详情</title>
-</head>
-
-<body>
-  <h3>标题： {{ post.title }}</h3>
-  </br>
-  <h3>作者： <a href="/info/{{ post.author.sno }}">{{ post.author.name }}</a></h3>
-  <h3>创建时间: {{ post.create_time }}</h3>
-  <h3>内容: {{ post.content }}</h3>
-  <h3>类别：{{ post.category }}</h3>
-  <h3>标签:
-    <ul>
-      {% for tag in tags %}
-      <li> {{ tag }} </li>
-      {% endfor %}
-    </ul>
-  </h3>
-  <h3>点赞量：{{post.likes}}</h3>
-  {% if sign %}
-  <a href="/bbs/edit/{{ post.id }}">编辑</a><br>
-  {% endif %}
-  <a href="/bbs/comment/{{ post.id }}/0">评论</a><br>
-  <a href="/bbs/">返回帖子主页</a>
-  <form action="/bbs/like/{{ post.id }}" method="post">
-    {% csrf_token %}
-    <input type="submit" value="点赞">
-  </form>
-  {{ message }}
-
-  <h3>评论列表</h3>
-  <ul>
-     {% for comment in comments %}
-         {% if not comment.root %}
-         <li>评论者：<a href="/info/{{ comment.name.sno }}">{{ comment.name.name }}</a></li>
-         <li>评论时间：{{ comment.created }}</li>
-         <li>评论内容：{{ comment.content }}</li>
-         <a href="/bbs/comment/{{ post.id }}/{{ comment.id }}">回复</a>
-            {% ifequal user.sno comment.name.sno %}
-            <form action="/bbs/delete/{{ comment.id }}" method="post">
-             {% csrf_token %}
-              <input type="submit" value="删除">
-            </form>
-            {% endifequal %}
-             <h4>回复列表</h4>
-             {% for reply in comment.root_comment.all %}
-                 <div class="reply">
-                     <span><a href="/info/{{ reply.name.sno }}">{{ reply.name.name }}</a></span>
-                     <span>({{ reply.created|date:"Y-m-d H:i:s" }})</span>
-                     <span>回复</span>
-                     <span><a href="/info/{{ reply.reply_to.sno }}">{{ reply.reply_to.name }}</a>：</span>
-                     <div id="comment_{{ reply.pk }}">
-                       {{ reply.content|safe }}
-                     </div>
-                     {% ifequal user.sno reply.name.sno %}
-                         <form action="/bbs/delete/{{ reply.id }}" method="post">
-                          {% csrf_token %}
-                           <input type="submit" value="删除">
-                         </form>
-                     {% endifequal %}
-                     <a href="/bbs/comment/{{ post.id }}/{{ reply.id }}">回复</a>
-                 </div>
-             {% endfor %}
-         {% endif %}
-     {% endfor %}
-   </ul>
-
-
-</body>
-
-</html>
-
-模态框
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
-          &times;
-        </button>
-        <h4 class="modal-title" id="myModalLabel">
-          评论
-        </h4>
-        <div class="text-center">
+          <!--评论回复部分-->
           </br>
-          <textarea class="form-control" rows="5" placeholder="写评论..."></textarea>
-          </br>
-          <button type="submit" class="btn btn-default">发送</button>
+          {% endif %}
+          {% endfor %}
+          {% else %}
+          还没有评论
+          {% endif %}
         </div>
       </div>
     </div>
   </div>
-</div>
-</div>
-</div>
--->
 
 </body>
 
