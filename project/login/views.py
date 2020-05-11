@@ -3,6 +3,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
 from django.shortcuts import redirect
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage, InvalidPage
+import datetime
 from . import forms, models
 from bbs.models import Post, Comment, Tag, Category, Message
 
@@ -10,7 +11,16 @@ from bbs.models import Post, Comment, Tag, Category, Message
 def index(request):
     if not request.session.get('is_login', None):
         return redirect('/login/login/')
-    return render(request, 'login/index.html')
+    user = models.User.objects.get(sno=request.session['user_sno'])
+    datetime_now = datetime.datetime.now().date()
+    datetime_lastweek = datetime_now - datetime.timedelta(weeks=1)
+    messages_list = Message.objects.filter(receiver=user, created__gte=datetime_lastweek, created__lte=datetime_now).order_by('-created')
+    posts_list = Post.objects.filter(create_time__gte=datetime_lastweek, create_time__lte=datetime_now).order_by('-likes')
+    if len(posts_list) > 5:
+        posts_list = posts_list[:5]
+    comments_list = Comment.objects.filter(name=user, created__gte=datetime_lastweek, created__lte=datetime_now).order_by('-created')
+    ctx = {"messages_list": messages_list, 'posts_list': posts_list, 'comments_list': comments_list}
+    return render(request, 'login/index.html', ctx)
 
 
 def login(request):
