@@ -12,7 +12,7 @@ def index(request):
     if not request.session.get('is_login', None):
         return redirect('/login/login/')
     user = models.User.objects.get(sno=request.session['user_sno'])
-    datetime_now = datetime.datetime.now().date()
+    datetime_now = datetime.datetime.now()
     datetime_lastweek = datetime_now - datetime.timedelta(weeks=1)
     messages_list = Message.objects.filter(receiver=user, created__gte=datetime_lastweek, created__lte=datetime_now).order_by('-created')
     posts_list = Post.objects.filter(create_time__gte=datetime_lastweek, create_time__lte=datetime_now).order_by('-likes')
