@@ -166,6 +166,7 @@
           </div>
           <!--评论部分-->
           <div class="list-group-item">
+            {% if comment.root_comment.all %}
             {% for reply in comment.root_comment.all %}
             <div class="list-group-item-heading">
               <span><a href="/info/{{ reply.name.sno }}">{{ reply.name.name }}</a></span>
@@ -194,13 +195,16 @@
               </div>
             </div>
             {% endfor %}
+            {% else %}
+            <span style="color:gray">还没有回复</span>
+            {% endif %}
           </div>
           <!--评论回复部分-->
           </br>
           {% endif %}
           {% endfor %}
           {% else %}
-          还没有评论
+          <span style="color:gray">还没有评论</span>
           {% endif %}
         </div>
       </div>
