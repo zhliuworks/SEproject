@@ -26,6 +26,10 @@ class User(models.Model):
         ('sheng_ming', "生命科学技术学院"),
         ('sheng_yi_gong', "生物医学工程学院"),
         ('an_tai', "安泰经济与管理学院"),
+        ('guo_wu', "国际与公共事务学院"),
+        ('ren_wen', "人文学院"),
+        ('huan_jing', "环境科学与工程学院"),
+        ('kong_tian', "航空航天学院"),
         ('qi_ta', "其它"),  # 暂时写到这儿
     )
 

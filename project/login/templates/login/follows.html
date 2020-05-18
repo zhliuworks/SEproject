@@ -47,8 +47,7 @@
               <li><a href="/posts/">我的发布</a></li>
               <li><a href="/comments/">我的评论</a></li>
               <li><a href="/mailbox/">我的信箱</a></li>
-              <li><a href="/follows/">我的关注</a></li>
-              <li><a href="/followers/">关注我的</a></li>
+              <li><a href="/follows/">我的好友</a></li>
             </ul>
           </li>
           <li><a href="/login/logout/">登出</a></li>
@@ -58,13 +57,13 @@
   </nav>
   <!--基础导航栏-->
 
-  <h3>&nbsp&nbsp我的关注</h3>
+  <h3>&nbsp&nbsp我的好友</h3>
 
 
   <div class="panel panel-default">
     <div class="panel-heading">
       {% if follow_set %}
-      <p class="panel-title" style="font-size: small;">总共有{{length}}个我关注的人，按粉丝数排序如下：</p>
+      <p class="panel-title" style="font-size: small;">总共有{{length}}个我的好友，按粉丝数排序如下：</p>
     </div>
     <div class="panel-body">
       <table class="table">
@@ -110,7 +109,7 @@
         </nav>
       </div>
       {% else %}
-      还没有我关注的用户
+      我还没有好友
       {% endif %}
     </div>
   </div>

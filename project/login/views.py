@@ -325,7 +325,7 @@ def follow(request, sno):
         user.follow.add(followed_user)
         user.save()
     else:
-        message1 = "您已经关注过TA了"
+        message1 = "您已经加TA为好友了"
     sign2 = True
     ctx = {'user': followed_user, 'message1': message1, 'sign1': sign1, 'sign2': sign2}
     return render(request, 'login/info.html', ctx)
@@ -343,7 +343,7 @@ def follow_cancel(request, sno):
         user.follow.remove(followed_user)
         user.save()
     else:
-        message1 = "您并没有关注TA"
+        message1 = "您并没有加TA为好友"
     sign2 = False
     sign1 = True
     ctx = {'user': followed_user, 'message1': message1, 'sign1': sign1, 'sign2': sign2}
@@ -391,29 +391,3 @@ def posts_ta(request, sno):
         posts = paginator.page(1)
     return render(request, 'login/posts_ta.html', {'user': user, 'posts': posts, "length": len(posts_list)})
 
-
-def followers(request):
-    if not request.session.get('is_login', None):
-        return redirect("/login/login/")
-    me = models.User.objects.get(sno=request.session['user_sno'])
-    follower_list = []
-    users = models.User.objects.all()
-    for user in users:
-        follow_list = user.follow.order_by('-fans')
-        if me in follow_list:
-            follower_list.append(user)
-
-    paginator = Paginator(follower_list, 10)
-    if request.method == "GET":
-        page = request.GET.get('page')
-        try:
-            follower_set = paginator.page(page)
-        except PageNotAnInteger:
-            follower_set = paginator.page(1)
-        except InvalidPage:
-            return HttpResponse('找不到页面的内容')
-        except EmptyPage:
-            follower_set = paginator.page(paginator.num_pages)
-    else:
-        follower_set = paginator.page(1)
-    return render(request, 'login/followers.html', {'follower_set': follower_set, "length": len(follower_list)})
