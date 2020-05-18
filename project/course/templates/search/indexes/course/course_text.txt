@@ -1,0 +1,2 @@
+{{ object.cno }}
+{{ object.name }}

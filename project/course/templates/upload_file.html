@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>上传资料</title>
+  <!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+  <!-- 可选的 Bootstrap 主题文件（一般不用引入） -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+  <script src="https://code.jquery.com/jquery.js"></script>
+
+  <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+</head>
+
+<body>
+  <nav class="navbar navbar-default">
+    <div class="container-fluid">
+      <!-- Brand and toggle get grouped for better mobile display -->
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="#">交大知乎</a>
+      </div>
+
+      <!-- Collect the nav links, forms, and other content for toggling -->
+      <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+        <ul class="nav navbar-nav">
+          <li><a href="/login/index/">主页<span class="sr-only">(current)</span></a></li>
+          <li><a href="/course/">课程</a></li>
+          <li><a href="/bbs/">社区</a></li>
+        </ul>
+
+        <ul class="nav navbar-nav navbar-right">
+          <li><a href="/about/">{{ request.session.user_name }}</a></li>
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">我的<span class="caret"></span></a>
+            <ul class="dropdown-menu">
+              <li><a href="/likes/">我的点赞</a></li>
+              <li><a href="/posts/">我的发布</a></li>
+              <li><a href="/comments/">我的评论</a></li>
+              <li><a href="/mailbox/">我的信箱</a></li>
+              <li><a href="/follows/">我的关注</a></li>
+              <li><a href="/followers/">关注我的</a></li>
+            </ul>
+          </li>
+          <li><a href="/login/logout/">登出</a></li>
+        </ul>
+      </div><!-- /.navbar-collapse -->
+    </div><!-- /.container-fluid -->
+  </nav>
+  <!--基础导航栏-->
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <div class="panel-title">
+        上传资料
+      </div>
+    </div>
+    <div class="panel-body">
+      <form action="/course/upload/action/" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="row">
+          <span class="col-sm-4"></span>
+          <label class="col-sm-1 control-label">{{ upload_form.title.label_tag }}</label>
+          <span class="col-sm-5" style="display: inline;">
+            {{ upload_form.title}}
+          </span>
+        </div>
+        <br>
+        <div class="row">
+          <span class="col-sm-4"></span>
+          <label class="col-sm-1 control-label">{{ upload_form.course.label_tag }}</label>
+          <span class="col-sm-5" style="display: inline;">
+            {{ upload_form.course}}
+          </span>
+        </div>
+        <br>
+        <div class="row">
+          <span class="col-sm-4"></span>
+          <label class="col-sm-1 control-label">{{ upload_form.introduction.label_tag }}</label>
+          <span class="col-sm-5" style="display: inline;">
+            {{ upload_form.introduction}}
+          </span>
+        </div>
+        <br>
+        <div class="row">
+          <span class="col-sm-4"></span>
+          <label class="col-sm-1 control-label">{{ upload_form.file.label_tag }}</label>
+          <span class="col-sm-5" style="display: inline;">
+            {{ upload_form.file}}
+          </span>
+        </div>
+        <br>
+        <div class="row">
+          <span class="col-sm-4"></span>
+          <span class="col-sm-5 text-center">
+            <button type="submit" class="btn btn-default">
+              上传
+            </button>
+      </form>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      <form action="/course/" method="post" style="display: inline;">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-default">
+          取消
+        </button>
+      </form>
+      {{ message }}
+      </span>
+    </div>
+  </div>
+
+</body>
+
+</html>

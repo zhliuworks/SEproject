@@ -1,0 +1,9 @@
+更新内容：
+1、帖子details.html美化
+2、帖子edit_page.html美化
+3、search.html
+4、课程index.html
+5、主页index.html
+问题：
+1、个人觉得搜索结果页不同类型需要显示不同的东西，风格统一不太好弄。
+前端待解决：

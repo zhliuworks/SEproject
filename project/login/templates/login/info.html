@@ -1,0 +1,206 @@
+<!doctype html>
+<html lang='en'>
+
+<head>
+  <!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css"
+    integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+  <!-- 可选的 Bootstrap 主题文件（一般不用引入） -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap-theme.min.css"
+    integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+  <script src="https://code.jquery.com/jquery.js"></script>
+
+  <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js"
+    integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+    crossorigin="anonymous"></script>
+  <title>{{ user.name }}的个人主页</title>
+</head>
+
+<body>
+  <nav class="navbar navbar-default">
+    <div class="container-fluid">
+      <!-- Brand and toggle get grouped for better mobile display -->
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+          data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="#">交大知乎</a>
+      </div>
+
+      <!-- Collect the nav links, forms, and other content for toggling -->
+      <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+        <ul class="nav navbar-nav">
+          <li class=""><a href="/login/index/">主页<span class="sr-only">(current)</span></a></li>
+          <li><a href="/course/">课程</a></li>
+          <li><a href="/bbs/">社区</a></li>
+
+        </ul>
+
+        <ul class="nav navbar-nav navbar-right">
+          <li><a href="/about/">{{ request.session.user_name }}</a></li>
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+              aria-expanded="false">我的<span class="caret"></span></a>
+            <ul class="dropdown-menu">
+              <li><a href="/likes/">我的点赞</a></li>
+              <li><a href="/posts/">我的发布</a></li>
+              <li><a href="/comments/">我的评论</a></li>
+              <li><a href="/mailbox/">我的信箱</a></li>
+              <li><a href="/follows/">我的关注</a></li>
+              <li><a href="/followers/">关注我的</a></li>
+            </ul>
+          </li>
+          <li><a href="/login/logout/">登出</a></li>
+        </ul>
+      </div><!-- /.navbar-collapse -->
+    </div><!-- /.container-fluid -->
+  </nav>
+  <!--基础导航栏-->
+
+
+  <br /><br /><br /><br />
+  <div class="text-center">
+    <h1>{{ user.name }}的个人资料</h1>
+  </div>
+  <br /><br />
+
+  <!--标题-->
+
+
+  <div class="row container-fluid">
+    <div class="col-xs-3"></div>
+    <div class="col-xs-6 table-responsive">
+      <table class="table table-bordered">
+        <tbody>
+          <tr>
+            <td class="text-center"><b>学号</b></td>
+            <td class="text-center"> {{ user.sno }}</td>
+            <td rowspan="8" align="center">
+              <img id="photo" src="{{ user.photo_clipped.url }}" alt="头像"><br><br>
+            </td>
+          </tr>
+          <tr>
+            <td class="text-center"><b>姓名</b></td>
+            <td class="text-center"> {{ user.name }}</td>
+          </tr>
+          <tr>
+            <td class="text-center"><b>昵称</b></td>
+            <td class="text-center"> {{ user.nickname }}</td>
+          </tr>
+          <tr>
+            <td class="text-center"><b>性别</b></td>
+            <td class="text-center"> {{ user.get_sex_display }}</td>
+          </tr>
+          <tr>
+            <td class="text-center"><b>学院</b></td>
+            <td class="text-center"> {{ user.get_institute_display }}</td>
+          </tr>
+          <tr>
+            <td class="text-center"><b>专业</b></td>
+            <td class="text-center"> {{ user.major }}</td>
+          </tr>
+          <tr>
+            <td class="text-center"><b>邮箱</b></td>
+            <td class="text-center"> {{ user.email }}</td>
+          </tr>
+          <tr>
+            <td class="text-center"><b>粉丝数</b></td>
+            <td class="text-center"> {{ user.fans }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="col-xs-2"></div>
+  </div>
+
+  <!--个人资料表格-->
+
+  <br />
+  <div class="text-center">
+    <span>
+      <button type="button" class="btn btn-default navbar-btn" data-toggle="modal" data-target="#myModal">发送私信</button>
+    </span>
+    <form action="/posts/{{ user.sno }}" method="post" style="display: inline;">
+      {% csrf_token %}
+      <button type="formaction" name="button" class="btn btn-default">TA的帖子</button>
+    </form>
+    {% if sign1 %}
+    <form action="/follow/{{ user.sno }}" method="post" style="display: inline;">
+      {% csrf_token %}
+      <button type="submit" class="btn btn-default">
+        <span class="glyphicon glyphicon-plus"></span>
+        关注
+      </button>
+    </form>
+    {% endif %}
+    {% if sign2 %}
+    <form action="/follow_cancel/{{ user.sno }}" method="post" style="display: inline;">
+      {% csrf_token %}
+      <button type="submit" class="btn btn-default">取消关注</button>
+    </form>
+    {% endif %}
+  </div>
+
+
+  <!--按钮-->
+
+
+  <!-- 模态框（Modal） -->
+  <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+            &times;
+          </button>
+          <h4 class="modal-title" id="myModalLabel">
+            写私信
+          </h4>
+          <div class="text-center">
+            <form action="/send/{{ user.sno }}" method="post">
+              {% csrf_token %}
+              <br /><br />
+
+              <div class="form-group">
+                <label for="lastname" class="col-sm-3 control-label">私信主题</label>
+                <div class="col-sm-7">
+                  <textarea class="form-control" rows="1" type="text" name="title" required="required"
+                    placeholder="Subject"></textarea>
+                </div>
+              </div>
+
+              <br /><br />
+
+              <div class="form-group">
+                <label for="lastname" class="col-sm-3 control-label">私信内容</label>
+                <div class="col-sm-7">
+                  <textarea class="form-control" rows="4" type="text" name="content" required="required"
+                    placeholder="Contents"></textarea>
+                </div>
+              </div>
+
+              <br /><br />
+
+              <input type="submit" value="发送">
+            </form>
+          </div>
+        </div>
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+  </div>
+  <!--发送消息-->
+
+  <div class="text-center">
+    <br>
+    <h4 style="color:red"><b>{{ message1 }}</b></h4><br>
+  </div>
+
+</body>
+
+</html>

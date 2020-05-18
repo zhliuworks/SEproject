@@ -1,0 +1,336 @@
+<html>
+
+<head>
+  <!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css"
+    integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+  <!-- 可选的 Bootstrap 主题文件（一般不用引入） -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap-theme.min.css"
+    integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+  <script src="https://code.jquery.com/jquery.js"></script>
+
+  <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js"
+    integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+    crossorigin="anonymous"></script>
+  <meta charset="UTF-8">
+  <style type="text/css">
+    .ex-search {
+      position: relative;
+    }
+
+    .ex-search:before {
+      content: ' ';
+      position: absolute;
+      width: 12px;
+      height: 12px;
+      border: 1px solid #666;
+      border-radius: 30px;
+      box-shadow: inset 1px 1px 10px rgba(0, 0, 0, .3);
+    }
+
+    .ex-search::after {
+      content: ' ';
+      position: absolute;
+      width: 7px;
+      height: 2px;
+      background: #666;
+      border-radius: 5px 0 0 5px;
+      -webkit-transform: rotate(225deg);
+      -moz-transform: rotate(225deg);
+      -ms-transform: rotate(225deg);
+      -o-transform: rotate(225deg);
+      transform: rotate(225deg);
+    }
+
+    .ex-search:before {
+      top: 0;
+      left: 0;
+    }
+
+    .ex-search:after {
+      right: -15px;
+      bottom: 0px;
+    }
+
+    .carousel {
+      height: 250px;
+    }
+
+    .carousel .item {
+      height: 250px;
+    }
+
+    .carousel .item img {
+      width: 100%;
+    }
+
+    .line-limit-length {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+  </style>
+  <title>首页</title>
+</head>
+
+<body>
+  <nav class="navbar navbar-default">
+    <div class="container-fluid">
+      <!-- Brand and toggle get grouped for better mobile display -->
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+          data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="#">交大知乎</a>
+      </div>
+
+      <!-- Collect the nav links, forms, and other content for toggling -->
+      <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+        <ul class="nav navbar-nav">
+          <li class=""><a href="/login/index/">主页<span class="sr-only">(current)</span></a></li>
+          <li><a href="/course/">课程</a></li>
+          <li><a href="/bbs/">社区</a></li>
+
+        </ul>
+
+        <ul class="nav navbar-nav navbar-right">
+          <li>
+            <form class="navbar-form navbar-left" method='get' action="/search/">
+              <div class="form-group">
+                <input type="text" class="form-control" placeholder="搜索课程/教师/资料/帖子" name='q'>
+              </div>
+              <button type="submit" class="btn btn-default">
+                <span class="ex-search"></span>
+                &nbsp&nbsp&nbsp&nbsp&nbsp搜索
+              </button>
+            </form>
+          </li>
+          <li><a href="/about/">{{ request.session.user_name }}</a></li>
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+              aria-expanded="false">我的<span class="caret"></span></a>
+            <ul class="dropdown-menu">
+              <li><a href="/likes/">我的点赞</a></li>
+              <li><a href="/posts/">我的发布</a></li>
+              <li><a href="/comments/">我的评论</a></li>
+              <li><a href="/mailbox/">我的信箱</a></li>
+              <li><a href="/follows/">我的关注</a></li>
+              <li><a href="/followers/">关注我的</a></li>
+            </ul>
+          </li>
+          <li><a href="/login/logout/">登出</a></li>
+        </ul>
+      </div><!-- /.navbar-collapse -->
+    </div><!-- /.container-fluid -->
+  </nav>
+  <!--基础导航栏-->
+
+
+  </div>
+  <!--主界面-->
+  <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
+    <ol class="carousel-indicators">
+      <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
+      <li data-target="#carousel-example-generic" data-slide-to="1"></li>
+      <li data-target="#carousel-example-generic" data-slide-to="2"></li>
+    </ol>
+
+
+    <div class="carousel-inner" role="listbox">
+      <div class="item active">
+        <img
+          src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1589542097420&di=0b9bda5dfa0b631bf468cb18ac7bfe2c&imgtype=0&src=http%3A%2F%2Fdpic.tiankong.com%2Fdd%2Fuj%2FQJ6345888966.jpg"
+          alt="2 slide" style="margin: 0 auto;">
+        <div class="carousel-caption">
+          <h1>{{ request.session.user_name }}，欢迎您！</h1>
+          <br>
+        </div>
+      </div>
+      <div class="item">
+        <img
+          src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1589542097420&di=0b9bda5dfa0b631bf468cb18ac7bfe2c&imgtype=0&src=http%3A%2F%2Fdpic.tiankong.com%2Fdd%2Fuj%2FQJ6345888966.jpg"
+          alt="2 slide" style="margin: 0 auto;">
+        <div class="carousel-caption">
+          <h1>饮水思源，爱国荣校。</h1>
+          <br>
+        </div>
+      </div>
+      <div class="item">
+        <img
+          src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1589542097420&di=0b9bda5dfa0b631bf468cb18ac7bfe2c&imgtype=0&src=http%3A%2F%2Fdpic.tiankong.com%2Fdd%2Fuj%2FQJ6345888966.jpg"
+          alt="2 slide" style="margin: 0 auto;">
+        <div class="carousel-caption">
+          <h1>在这里你可以畅所欲言。</h1>
+          <br>
+        </div>
+      </div>
+    </div>
+
+    <a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev">
+      <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+      <span class="sr-only">Previous</span>
+    </a>
+    <a class="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next">
+      <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+      <span class="sr-only">Next</span>
+    </a>
+  </div>
+  <!--slide-->
+  <br>
+  <div class="row">
+
+
+    <div class="col-sm-4 col-md-4">
+      <div class="thumbnail">
+
+        <div class="caption">
+          <div class="text-center">
+            <h3>近一周的来信</h3>
+          </div>
+          <div style="height: 420px;overflow: auto;">
+            <p>
+            <div class="list-group">
+              {% for message in messages_list %}
+              <li class="list-group-item">
+                <b>发信人：</b><a
+                  href="/info/{{ message.sender.sno }}">{{ message.sender.name }}</a>&nbsp&nbsp&nbsp&nbsp<b>主题：</b>{{ message.title }}
+                </br>
+                <div class="line-limit-length">{{ message.content }}</div>
+                <div style="color: gray;">{{ message.created|date:"Y-m-d H:i:s" }}</div>
+                <a href="/mailbox/"><button type="button" class="btn btn-default btn-xs">查看</button></a>
+              </li>
+              {% endfor %}
+            </div>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="col-sm-4 col-md-4">
+      <div class="thumbnail">
+
+        <div class="caption">
+          <div class="text-center">
+            <h3>近期帖子热榜</h3>
+          </div>
+          <div style="height: 420px;overflow: auto;">
+            <div class="list-group">
+              {% for post in posts_list %}
+              <li class="list-group-item">
+                <h4 class="list-group-item-heading">{{ forloop.counter }}&nbsp&nbsp<a
+                    href="/bbs/{{ post.id }}">{{ post.title }}</a></h4>
+                <div class="list-group-item-text">
+                  <div class="line-limit-length">{{ post.content }}</div>
+                  <!--内容超出会显示省略号-->
+                  <span class="glyphicon glyphicon-thumbs-up" aria-hidden="true">&nbsp{{ post.likes }}</span><br>
+                </div>
+              </li>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-4 col-md-4">
+      <div class="thumbnail">
+        <div class="caption">
+          <div class="text-center">
+            <h3>近期我的评论</h3>
+          </div>
+          <div style="height: 420px;overflow: auto;">
+            <p>
+            <div class="list-group">
+              {% for comment in comments_list %}
+              <li class="list-group-item">
+                <b>帖子名：</b><a href="/bbs/{{ comment.post.id }}">{{ comment.post.title }}</a>&nbsp&nbsp&nbsp&nbsp
+                {% if comment.reply_to %}
+                我回复了<a href="/info/{{ comment.reply_to.sno }}">{{ comment.reply_to.name }}</a>的评论
+                {% else %}
+                我评论了<a href="/info/{{ comment.post.author.sno }}">{{ comment.post.author.name }}</a>的帖子
+                {% endif %}
+                <br>
+                <div class="line-limit-length">{{ comment.content }}</div>
+                <div style="color:gray">{{ comment.created }}</div>
+              </li>
+              {% endfor %}
+            </div>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <!--主界面-->
+  <!--
+  <div class="text-center">
+    <h3>{{ request.session.user_name }}，欢迎您！</h3>
+    <h3>暂定主页布局：两边边栏显示近一周来信、帖子热榜和评论，中间尝试播放幻灯片展示该网站，再加搜索框</h3>
+  </div>
+
+  <form class="navbar-form navbar-left" method='get' action="/search/">
+    <div class="form-group">
+      <input type="text" class="form-control" placeholder="搜索课程/教师/资料/帖子" name='q'>
+    </div>
+    <button type="submit" class="btn btn-default">
+      <span class="ex-search"></span>
+      &nbsp&nbsp&nbsp&nbsp&nbsp搜索
+    </button>
+  </form>
+  <br><br><br><br>
+
+  <h3><b>&nbsp&nbsp近一周的来信</b></h3>
+  <ul class="list-group">
+    {% for message in messages_list %}
+    <li class="list-group-item">
+      {{ message.sender.name }}在{{ message.created|date:"Y-m-d H:i:s" }}给您发来了一封私信，
+      <a href="/info/{{ message.sender.sno }}">回复TA</a>
+      <h5><strong>{{ message.title }}</strong></h5>
+      <p>{{ message.content }}</p>
+    </li>
+    {% endfor %}
+  </ul>
+  <h3><b>&nbsp&nbsp近期帖子热榜</b></h3>
+  <ul class="list-group">
+    {% for post in posts_list %}
+    <li class="list-group-item">
+      <h4><b>{{ forloop.counter }}&nbsp&nbsp<a href="/bbs/{{ post.id }}">{{ post.title }}</a></b></h4>
+      <span class="glyphicon glyphicon-thumbs-up" aria-hidden="true">&nbsp{{ post.likes }}</span><br>
+    </li>
+    {% endfor %}
+  </ul>
+  <h3><b>&nbsp&nbsp近期我的评论</b></h3>
+  <ul class="list-group">
+    {% for comment in comments_list %}
+    <li class="list-group-item">
+      我于{{ comment.created|date:"Y-m-d H:i:s" }}
+      {% if comment.reply_to %}
+      回复了<a href="/info/{{ comment.reply_to.sno }}">{{ comment.reply_to.name }}</a>的关于帖子
+      <b><a href="/bbs/{{ comment.post.id }}">{{ comment.post.title }}</a></b>的评论
+      {% else %}
+      评论了<a href="/info/{{ comment.post.author.sno }}">{{ comment.post.author.name }}</a>发布的帖子
+      <b><a href="/bbs/{{ comment.post.id }}">{{ comment.post.title }}</a></b>
+      {% endif %}
+      <br>
+      {{ comment.content }}
+    </li>
+    {% endfor %}
+  </ul>
+  -->
+  <ol class="breadcrumb">
+    <p>本项目源码受 <a rel="license" href="https://github.com/twbs/bootstrap/blob/master/LICENSE"
+        target="_blank">MIT</a>开源协议保护，文档受 <a rel="license" href="https://creativecommons.org/licenses/by/3.0/"
+        target="_blank">CC BY 3.0</a> 开源协议保护。</p>
+  </ol>
+
+</body>
+
+</html>
