@@ -68,7 +68,7 @@
           我评论了<a href="/info/{{ comment.post.author.sno }}">{{ comment.post.author.name }}</a>的帖子
           {% endif %}
           <br>
-          {{ comment.content }}
+          <p style="word-break: break-all;">{{ comment.content }}</p>
           <div style="color:gray">{{ comment.created }}</div>
         </button>
       </div>

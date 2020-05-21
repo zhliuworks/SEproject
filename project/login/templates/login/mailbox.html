@@ -61,7 +61,7 @@
       <div>
         <button type="button" class="list-group-item">
           <b>发信人：</b><a href="/info/{{ message.sender.sno }}">{{ message.sender.name }}</a>&nbsp&nbsp&nbsp&nbsp<b>主题：</b>{{ message.title }}
-          <p>{{ message.content }}</p>
+          <p style="word-break: break-all;">{{ message.content }}</p>
           <div style="color:gray">{{ message.created }}</div>
         </button>
       </div>
