@@ -323,6 +323,7 @@ def follow(request, sno):
         followed_user.fans += 1
         followed_user.save()
         user.follow.add(followed_user)
+        user.fans += 1
         user.save()
     else:
         message1 = "您已经添加TA为好友了"
@@ -341,6 +342,7 @@ def follow_cancel(request, sno):
         followed_user.fans -= 1
         followed_user.save()
         user.follow.remove(followed_user)
+        user.fans -= 1
         user.save()
     else:
         message1 = "您并没有添加TA为好友"
