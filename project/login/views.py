@@ -325,7 +325,11 @@ def follow(request, sno):
         user.follow.add(followed_user)
         user.save()
     else:
+<<<<<<< HEAD
         message1 = "您已经加TA为好友了"
+=======
+        message1 = "您已经添加TA为好友了"
+>>>>>>> bf3e0aae9761640197b916e46b8445423cf75ffb
     sign2 = True
     ctx = {'user': followed_user, 'message1': message1, 'sign1': sign1, 'sign2': sign2}
     return render(request, 'login/info.html', ctx)
@@ -343,7 +347,11 @@ def follow_cancel(request, sno):
         user.follow.remove(followed_user)
         user.save()
     else:
+<<<<<<< HEAD
         message1 = "您并没有加TA为好友"
+=======
+        message1 = "您并没有添加TA为好友"
+>>>>>>> bf3e0aae9761640197b916e46b8445423cf75ffb
     sign2 = False
     sign1 = True
     ctx = {'user': followed_user, 'message1': message1, 'sign1': sign1, 'sign2': sign2}

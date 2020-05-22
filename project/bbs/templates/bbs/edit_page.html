@@ -1,20 +1,11 @@
 <!DOCTYPE html>
-<html lang="en" xmlns="http://www.w3.org/1999/html">
+<html lang="en">
 
 <head>
-  <!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css"
-    integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-
-  <!-- 可选的 Bootstrap 主题文件（一般不用引入） -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap-theme.min.css"
-    integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
   <script src="https://code.jquery.com/jquery.js"></script>
-
-  <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js"
-    integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
-    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
   <meta charset="UTF-8">
   <title>编辑帖子</title>
 </head>
@@ -22,10 +13,8 @@
 <body>
   <nav class="navbar navbar-default">
     <div class="container-fluid">
-      <!-- Brand and toggle get grouped for better mobile display -->
       <div class="navbar-header">
-        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
-          data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
           <span class="sr-only">Toggle navigation</span>
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
@@ -34,20 +23,17 @@
         <a class="navbar-brand" href="#">交大知乎</a>
       </div>
 
-      <!-- Collect the nav links, forms, and other content for toggling -->
       <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
         <ul class="nav navbar-nav">
           <li class=""><a href="/login/index/">主页<span class="sr-only">(current)</span></a></li>
           <li><a href="/course/">课程</a></li>
           <li><a href="/bbs/">社区</a></li>
-
         </ul>
 
         <ul class="nav navbar-nav navbar-right">
           <li><a href="/about/">{{ request.session.user_name }}</a></li>
           <li class="dropdown">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-              aria-expanded="false">我的<span class="caret"></span></a>
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">我的<span class="caret"></span></a>
             <ul class="dropdown-menu">
               <li><a href="/likes/">我的点赞</a></li>
               <li><a href="/posts/">我的发布</a></li>
@@ -58,10 +44,11 @@
           </li>
           <li><a href="/login/logout/">登出</a></li>
         </ul>
-      </div><!-- /.navbar-collapse -->
-    </div><!-- /.container-fluid -->
+      </div>
+    </div>
   </nav>
   <!--基础导航栏-->
+
   <div class="panel panel-default">
     <div class="panel-heading">
       <div class="panel-title">
@@ -77,8 +64,7 @@
           <span class="col-sm-3"></span>
           <label class="col-sm-1 control-label">帖子标题</label>
           <span class="col-sm-5" style="display: inline;">
-            <input class="form-control" rows="1" type="text" name="title" required="required" placeholder="Title"
-              value="{{post.title}}"></input>
+            <input class="form-control" rows="1" type="text" name="title" required="required" placeholder="Title" value="{{post.title}}"></input>
           </span>
         </div>
         </br>
@@ -86,8 +72,7 @@
           <span class="col-sm-3"></span>
           <label class="col-sm-1 control-label">帖子内容</label>
           <span class="col-sm-5" style="display: inline;">
-            <textarea class="form-control" rows="5" type="text" name="content" required="required"
-              placeholder="Content">{{ post.content }}</textarea>
+            <textarea class="form-control" rows="5" type="text" name="content" required="required" placeholder="Content">{{ post.content }}</textarea>
           </span>
         </div>
         </br>
@@ -134,9 +119,10 @@
         <br>
         <div class="row">
           <span class="col-sm-4"></span>
-          <label class="col-sm-1 control-label">{{ post_form.tag.label_tag }}<br>（注：按住Ctrl键选择多个标签）</label>
+          <label class="col-sm-1 control-label">{{ post_form.tag.label_tag }}<br></label>
           <span class="col-sm-5" style="display: inline;">
             {{ post_form.tag}}
+            （注：按住Ctrl键选择多个标签）
           </span>
         </div>
         <br>
@@ -159,7 +145,7 @@
     </form>
   </div>
   </div>
-<!--写帖子-->
+  <!--写帖子-->
 
 </body>
 

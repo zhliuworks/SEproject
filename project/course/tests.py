@@ -42,3 +42,4 @@ class UrlResponseTest(TestCase):
     def test_upload_file_action(self):
         response = self.client.get('/course/upload/action/')
         self.assertEqual(response.status_code, 302)
+

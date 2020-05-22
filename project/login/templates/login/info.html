@@ -1,30 +1,19 @@
-<!doctype html>
-<html lang='en'>
+<!DOCTYPE html>
+<html lang="en">
 
 <head>
-  <!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css"
-    integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-
-  <!-- 可选的 Bootstrap 主题文件（一般不用引入） -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap-theme.min.css"
-    integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
   <script src="https://code.jquery.com/jquery.js"></script>
-
-  <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js"
-    integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
-    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
   <title>{{ user.name }}的个人主页</title>
 </head>
 
 <body>
   <nav class="navbar navbar-default">
     <div class="container-fluid">
-      <!-- Brand and toggle get grouped for better mobile display -->
       <div class="navbar-header">
-        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
-          data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
           <span class="sr-only">Toggle navigation</span>
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
@@ -33,20 +22,17 @@
         <a class="navbar-brand" href="#">交大知乎</a>
       </div>
 
-      <!-- Collect the nav links, forms, and other content for toggling -->
       <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
         <ul class="nav navbar-nav">
           <li class=""><a href="/login/index/">主页<span class="sr-only">(current)</span></a></li>
           <li><a href="/course/">课程</a></li>
           <li><a href="/bbs/">社区</a></li>
-
         </ul>
 
         <ul class="nav navbar-nav navbar-right">
           <li><a href="/about/">{{ request.session.user_name }}</a></li>
           <li class="dropdown">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-              aria-expanded="false">我的<span class="caret"></span></a>
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">我的<span class="caret"></span></a>
             <ul class="dropdown-menu">
               <li><a href="/likes/">我的点赞</a></li>
               <li><a href="/posts/">我的发布</a></li>
@@ -57,20 +43,17 @@
           </li>
           <li><a href="/login/logout/">登出</a></li>
         </ul>
-      </div><!-- /.navbar-collapse -->
-    </div><!-- /.container-fluid -->
+      </div>
+    </div>
   </nav>
   <!--基础导航栏-->
-
 
   <br /><br /><br /><br />
   <div class="text-center">
     <h1>{{ user.name }}的个人资料</h1>
   </div>
   <br /><br />
-
   <!--标题-->
-
 
   <div class="row container-fluid">
     <div class="col-xs-3"></div>
@@ -117,7 +100,6 @@
     </div>
     <div class="col-xs-2"></div>
   </div>
-
   <!--个人资料表格-->
 
   <br />
@@ -145,10 +127,7 @@
     </form>
     {% endif %}
   </div>
-
-
   <!--按钮-->
-
 
   <!-- 模态框（Modal） -->
   <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -169,18 +148,15 @@
               <div class="form-group">
                 <label for="lastname" class="col-sm-3 control-label">私信主题</label>
                 <div class="col-sm-7">
-                  <textarea class="form-control" rows="1" type="text" name="title" required="required"
-                    placeholder="Subject"></textarea>
+                  <textarea class="form-control" rows="1" type="text" name="title" required="required" placeholder="Subject"></textarea>
                 </div>
               </div>
-
               <br /><br />
 
               <div class="form-group">
                 <label for="lastname" class="col-sm-3 control-label">私信内容</label>
                 <div class="col-sm-7">
-                  <textarea class="form-control" rows="4" type="text" name="content" required="required"
-                    placeholder="Contents"></textarea>
+                  <textarea class="form-control" rows="4" type="text" name="content" required="required" placeholder="Contents"></textarea>
                 </div>
               </div>
 
@@ -190,8 +166,8 @@
             </form>
           </div>
         </div>
-      </div><!-- /.modal-content -->
-    </div><!-- /.modal -->
+      </div>
+    </div>
   </div>
   <!--发送消息-->
 
