@@ -54,6 +54,8 @@
 
 > index.html（课程版块主页）
 
+> upload_file.html（上传资料页）
+
 > courses/index.html（课程信息页）
 
 > courses/detail.html（课程信息详情页）
@@ -61,6 +63,10 @@
 > teachers/index.html（老师信息页）
 
 > teachers/detail.html（老师信息详情页）
+
+> search/index.html（搜索页）
+
+> search/search.html（搜索详情页）
 
 ### --bbs/（帖子app）
 
