@@ -2,13 +2,9 @@
 
 ### 注：该仓库中只包含Django网页应用的部分必要代码文件，不含db.sqlite3等文件。
 
-### 目前进度：基本框架搭建完毕，然后逐步开始实现以下内容：
+### 目前进度：基本框架搭建完毕，主要功能也已实现。
 
-#### （1）后端：帖子功能设计与编码等
-
-#### （2）前端：部分页面渲染工作
-
-#### 2020.4.10更新（第一轮迭代：第二周）
+#### 2020.5.25更新
 
 ## 包括源代码文件如下：
 
@@ -20,6 +16,12 @@
 > settings.py（服务器设置）
 
 > urls.py（根路由）
+
+> _init_.py
+
+> asgi.py
+
+> wsgi.py
 
 
 ### --login/（登录app）
@@ -36,6 +38,8 @@
 > urls.py（路由）
 
 > views.py（视图函数）
+ 
+>_init_.py 
 
 #### 以下省略其它app的类似.py文件
 
@@ -48,6 +52,20 @@
 
 > register.html（注册页）
 
+> comments.html（我的评论）
+
+> follows.html（我的关注）
+
+> info.html
+
+> likes.html（我的赞）
+
+> mailbox.html（我的信箱）
+
+> posts.html（我的帖子）
+
+> posts_ta（他的帖子）
+
 ### --course/（课程板块app）
 
 #### 包含以下模板文件
@@ -56,17 +74,13 @@
 
 > upload_file.html（上传资料页）
 
-> courses/index.html（课程信息页）
-
 > courses/detail.html（课程信息详情页）
-
-> teachers/index.html（老师信息页）
 
 > teachers/detail.html（老师信息详情页）
 
 > search/index.html（搜索页）
 
-> search/search.html（搜索详情页）
+> search/search.html（搜索结果页）
 
 ### --bbs/（帖子app）
 
@@ -78,4 +92,4 @@
 
 > edit_page.html（帖子编辑页）
 
-> comment_page.html（帖子评论页
+> comment_page.html（帖子评论页）
