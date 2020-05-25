@@ -21,8 +21,16 @@
 
 > urls.py（根路由）
 
+> wsgi.py
+
+> asgi.py
+
+> init.py
 
 ### --login/（登录app）
+
+> init.py
+
 > admin.py（管理）
 
 > apps.py
@@ -40,11 +48,25 @@
 #### 以下省略其它app的类似.py文件
 
 #### 包含以下模板文件
-> about.html（我的信息）
+> about.html（我的信息页）
+
+> comments.html（评论页）
+
+> follows.html （关注者页）
 
 > index.html（主页）
 
+> info.html（资料页）
+
+> likes.html （点赞页）
+
 > login.html（登录页）
+
+> mailbox.html （信箱页）
+
+> posts_ta.html （他人帖子页）
+
+> posts.html （我的帖子页）
 
 > register.html（注册页）
 
@@ -54,19 +76,15 @@
 
 > index.html（课程版块主页）
 
-> upload_file.html（上传资料页）
-
-> courses/index.html（课程信息页）
-
 > courses/detail.html（课程信息详情页）
 
-> teachers/index.html（老师信息页）
+> search/search.html（搜索页）
 
-> teachers/detail.html（老师信息详情页）
+> search/teachers/detail.html（老师信息详情页）
 
-> search/index.html（搜索页）
+> search/index.html（搜索结果页）
 
-> search/search.html（搜索详情页）
+> upload_file.html （上传资料页）
 
 ### --bbs/（帖子app）
 
@@ -78,4 +96,4 @@
 
 > edit_page.html（帖子编辑页）
 
-> comment_page.html（帖子评论页
+> comment_page.html（帖子评论页）
